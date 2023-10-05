@@ -32,15 +32,14 @@ public class SecurityConfig {
         ;
 
         http.authorizeRequests()
-                .mvcMatchers("/css/**", "/js/**", "/img/**").permitAll()
+                .mvcMatchers("/css/**", "/js/**", "/imgs/**", "/img/**", "/scss/**", "/fonts/**").permitAll()
                 .mvcMatchers("/", "/members/**", "/item/**", "/images/**").permitAll()
-                .mvcMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
+//                .mvcMatchers("/admin/**").hasRole("ADMIN")
+//                .anyRequest().authenticated()
         ;
 
         http.exceptionHandling()
-                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-        ;
+                .authenticationEntryPoint(new CustomAuthenticationEntryPoint());
 
         return http.build();
     }
