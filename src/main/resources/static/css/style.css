@@ -1117,3 +1117,16 @@ h1, h2, h3, h4, h5,
   .post-meta a {
     color: #fff;
     border-bottom: 1px solid rgba(255, 255, 255, 0.5); }
+
+/*
+custom by jiyoon
+*/
+.login-form-container {
+    width: 40%;
+    border-radius: 5%;
+    padding: 20px;
+    float: right;
+    position: relative;
+    top: 84px;
+    right: 50px;
+}

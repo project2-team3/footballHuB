@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ShopController {
     @GetMapping
     public String shopMain(){
-        return "shop/shop";
+        return "shop/main";
+    }
+
+    @GetMapping(value = "/test")
+    public String testMain(){
+        return "shop/main-copy";
     }
 }

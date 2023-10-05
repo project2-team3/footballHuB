@@ -38,9 +38,8 @@ public class SecurityConfig {
 //                .anyRequest().authenticated()
         ;
 
-//        http.exceptionHandling()
-//                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-//        ;
+        http.exceptionHandling()
+                .authenticationEntryPoint(new CustomAuthenticationEntryPoint());
 
         return http.build();
     }
