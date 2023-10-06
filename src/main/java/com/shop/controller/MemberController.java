@@ -32,14 +32,11 @@ public class MemberController {
     @PostMapping(value = "/new")
     public String newMember(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, Model model){
 
-        System.out.print("들어왔냐");
-//        if(bindingResult.hasErrors()){
-//            return "member/memberForm";
-//        }
-
+        if(bindingResult.hasErrors()){
+            return "member/memberForm";
+        }
         try {
             Member member = Member.createMember(memberFormDto, passwordEncoder);
-            System.out.print(member);
             memberService.saveMember(member);
         } catch (IllegalStateException e){
             model.addAttribute("errorMessage", e.getMessage());
