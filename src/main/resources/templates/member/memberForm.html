@@ -54,7 +54,7 @@
             <form action="/members/new" role="form" method="post" th:object="${memberFormDto}" >
                 <div class="form-group">
                     <label th:for="name">이름</label>
-                    <input type="text" th:field="*{name}" style="color: #495057 !important; border-color: #ced4da !important;" class="form-control" placeholder="이름을 입력해주세요">
+                    <input type="text" th:field="*{name}" class="form-control" placeholder="이름을 입력해주세요">
                     <p style="color: #d44950 !important;" th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect data</p>
                 </div>
                 <div class="form-group">
