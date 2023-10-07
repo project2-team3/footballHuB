@@ -1,6 +1,7 @@
 package com.shop.config;
 
 import com.shop.service.MemberService;
+import com.shop.service.PrincipalOauth2UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,8 @@ public class SecurityConfig {
     @Autowired
     MemberService memberService;
 
+    @Autowired
+    private PrincipalOauth2UserService principalOauth2UserService;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.formLogin()
@@ -29,6 +32,11 @@ public class SecurityConfig {
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/members/logout"))
                 .logoutSuccessUrl("/")
+                .and()
+                .oauth2Login()
+                .defaultSuccessUrl("/shop")
+                .userInfoEndpoint()
+                .userService(principalOauth2UserService);
         ;
 
         http.authorizeRequests()
