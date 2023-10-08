@@ -1,5 +1,7 @@
 package com.shop.controller;
 
+import com.shop.dto.CategoryDto;
+import com.shop.service.CategoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -30,10 +32,15 @@ import java.util.Optional;
 public class ItemController {
 
     private final ItemService itemService;
+    private final CategoryService categoryService;
 
     @GetMapping(value = "/admin/item/new")
     public String itemForm(Model model){
+
+        List<CategoryDto> categories = categoryService.getAllCategory();
+
         model.addAttribute("itemFormDto", new ItemFormDto());
+        model.addAttribute("categories", categories);
         return "shop/item/itemForm";
     }
 
