@@ -1,6 +1,6 @@
 package com.shop.service;
 
-import com.shop.config.PrincipalDetails;
+import com.shop.dto.PrincipalDetails;
 import com.shop.dto.MemberFormDto;
 import com.shop.entity.Member;
 import com.shop.repository.MemberRepository;

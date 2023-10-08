@@ -1,4 +1,4 @@
-package com.shop.config;
+package com.shop.dto;
 
 import com.shop.entity.Member;
 import lombok.Getter;
@@ -30,10 +30,6 @@ public class PrincipalDetails implements OAuth2User {
         this.attributes = attributes;
     }
 
-    /**
-     * UserDetails 구현
-     * 해당 유저의 권한목록 리턴
-     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
@@ -46,22 +42,14 @@ public class PrincipalDetails implements OAuth2User {
         });
         return collect;
     }
-    /**
-     * OAuth2User 구현
-     * @return
-     */
+
     @Override
     public Map<String, Object> getAttributes() {
         return attributes;
     }
 
-    /**
-     * OAuth2User 구현
-     * @return
-     */
     @Override
     public String getName() {
-        String sub = attributes.get("sub").toString();
-        return sub;
+        return attributes.get("sub").toString();
     }
 }
