@@ -1,6 +1,5 @@
 package com.shop.entity;
 
-import com.shop.constant.Rating;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,8 +15,7 @@ public class ItemRating extends BaseEntity {
     private Long id;
 
     @Column(name = "rating", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Rating rating;
+    private String rating;
 
     @ManyToOne
     @JoinColumn(name = "item_id")

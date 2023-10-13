@@ -33,15 +33,14 @@ public class Member extends BaseEntity {
     private String address;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private Role role;
 
     private String provider;
 
     private String providerId;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<ItemComment> itemComments = new ArrayList<>();
+//    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+//    private List<ItemComment> itemComments = new ArrayList<>();
 
 
     public static Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder){

@@ -37,17 +37,16 @@ public class ItemController {
     @GetMapping(value = "/admin/item/new")
     public String itemForm(Model model){
 
-        List<CategoryDto> categories = categoryService.getAllCategory();
+        List<CategoryDto> categoryDtoList = categoryService.getAllCategory();
 
         model.addAttribute("itemFormDto", new ItemFormDto());
-        model.addAttribute("categories", categories);
+        model.addAttribute("categoryDtoList", categoryDtoList);
         return "shop/item/itemForm";
     }
 
     @PostMapping(value = "/admin/item/new")
     public String itemNew(@Valid ItemFormDto itemFormDto, BindingResult bindingResult,
                           Model model, @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList){
-
         if(bindingResult.hasErrors()){
             return "shop/item/itemForm";
         }

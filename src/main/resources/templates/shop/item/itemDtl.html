@@ -11,14 +11,53 @@
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
     <script th:inline="javascript">
+
         $(document).ready(function(){
 
             calculateToalPrice();
+
+            getCommentList();
+
+            $("#commentForm").on("click",function(e) {
+                e.preventDefault();
+            });
 
             $("#count").change( function(){
                 calculateToalPrice();
             });
         });
+
+        function getCommentList() {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            var url = "/comment/" + $("#itemId").val();
+
+            $.ajax({
+                url      : url,
+                type     : "GET",
+                contentType : "application/json",
+                beforeSend : function(xhr){
+                    /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType : "json",
+                cache   : false,
+                success  : function(result, status){
+                    console.log(result);
+                },
+                error : function(jqXHR, status, error){
+
+                    if(jqXHR.status == '401'){
+                        alert('로그인 후 이용해주세요');
+                        location.href='/members/login';
+                    } else{
+                        alert(jqXHR.responseText);
+                    }
+
+                }
+            });
+        }
 
         function calculateToalPrice(){
             var count = $("#count").val();
@@ -53,6 +92,45 @@
                 success  : function(result, status){
                     alert("주문이 완료 되었습니다.");
                     location.href='/';
+                },
+                error : function(jqXHR, status, error){
+
+                    if(jqXHR.status == '401'){
+                        alert('로그인 후 이용해주세요');
+                        location.href='/members/login';
+                    } else{
+                        alert(jqXHR.responseText);
+                    }
+
+                }
+            });
+        }
+
+        function addComment() {
+        var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            var url = "/comment";
+            var paramData = {
+                itemId : $("#itemId").val(),
+                content : $("#comment").val()
+            };
+
+            var param = JSON.stringify(paramData);
+
+            $.ajax({
+                url      : url,
+                type     : "POST",
+                contentType : "application/json",
+                data     : param,
+                beforeSend : function(xhr){
+                    /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType : "json",
+                cache   : false,
+                success  : function(result, status){
+                    console.log(result);
                 },
                 error : function(jqXHR, status, error){
 
@@ -190,6 +268,17 @@
             <hr class="my-4">
             <p class="lead" th:text="${item.itemDetail}"></p>
         </div>
+        <div id="response"></div>
+        <form id="commentForm">
+            <textarea cols="50" rows="10" id="comment"></textarea>
+            <input type="submit" value="Submit" onclick="addComment()">
+        </form>
+        <ul th:if="${commentList}">
+            <li th:each="comment : ${commentList}">[[${comment}]]</li>
+        </ul>
+        <form>
+
+        </form>
     </div>
 
     <div th:each="itemImg : ${item.itemImgDtoList}" class="text-center">

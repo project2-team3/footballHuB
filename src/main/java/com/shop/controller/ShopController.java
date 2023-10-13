@@ -31,8 +31,4 @@ public class ShopController {
 
         return "shop/main";
     }
-    @GetMapping(value = "/test")
-    public String testMain(){
-        return "shop/main-copy";
-    }
 }

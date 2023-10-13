@@ -1,17 +1,74 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout1}">
+      layout:decorate="~{shop/layouts/layout}">
 
 <head>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link rel="stylesheet" th:href="@{/css/rate.css}" />
 </head>
 
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
 
     <script th:inline="javascript">
+        $(document).ready(function(){
+            var orders = [[${orders}]];
+            for (let i = 0; i < orders.content.length; i++) {
+                for(let j = 0; j < orders.content[i].orderItemDtoList.length; j++) {
+                    const orderItem = orders.content[i].orderItemDtoList[j]
+                    if(orderItem.grade) fillStar(orderItem.grade, orderItem.id);
+                }
+            };
+        });
+        function fillStar(grade, orderItemId) {
+            const $fieldset = document.querySelector(".rate"+orderItemId);
+            const labelList = $fieldset?.querySelectorAll("label");
+
+            let tag = false;
+            for (let i = labelList.length-1; i >= 0; i--) {
+                const label = labelList[i];
+                label.style.color = tag ? '#ddd' : '#f73c32';
+                if (label.htmlFor[0] === grade) {
+                    tag = true;
+                }
+            }
+        }
+        function addRating(grade, orderItemId) {
+            fillStar(grade, orderItemId);
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            var paramData = {
+                orderItemId : orderItemId,
+                grade: grade
+            };
+
+            var param = JSON.stringify(paramData);
+
+            $.ajax({
+                url      : "/rating",
+                type     : "POST",
+                contentType : "application/json",
+                data     : param,
+                beforeSend : function(xhr){
+                    /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType : "json",
+                cache   : false,
+                success  : function(result, status){
+                },
+                error : function(jqXHR, status, error){
+                    if(jqXHR.status == '401'){
+                        alert('로그인 후 이용해주세요');
+                        location.href='/members/login';
+                    } else{
+                        alert(jqXHR.responseText);
+                    }
+                }
+            });
+        }
         function cancelOrder(orderId) {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
@@ -109,12 +166,21 @@
                 <div class="repImgDiv">
                     <img th:src="${orderItem.imgUrl}" class = "rounded repImg" th:alt="${orderItem.itemNm}">
                 </div>
-                <div class="align-self-center w-75">
+                <div class="align-self-center w-65">
                     <span th:text="${orderItem.itemNm}" class="fs24 font-weight-bold"></span>
                     <div class="fs18 font-weight-light">
                         <span th:text="${orderItem.orderPrice} +'원'"></span>
                         <span th:text="${orderItem.count} +'개'"></span>
                     </div>
+                </div>
+                <div>
+                    <fieldset th:class="'rate rate' + ${orderItem.id}" th:if="${order.orderStatus == T(com.shop.constant.OrderStatus).ORDER}">
+                        <input type="radio" th:class="rating+${orderItem.id}" th:id="5rating+${orderItem.id}" name="rating" value="5" th:onchange="addRating(this.value, [[${orderItem.id}]])"><label th:for="5rating+${orderItem.id}" title="1점"></label>
+                        <input type="radio" th:class="rating+${orderItem.id}" th:id="4rating+${orderItem.id}" name="rating" value="4" th:onchange="addRating(this.value, [[${orderItem.id}]])"><label th:for="4rating+${orderItem.id}" title="2점"></label>
+                        <input type="radio" th:class="rating+${orderItem.id}" th:id="3rating+${orderItem.id}" name="rating" value="3" th:onchange="addRating(this.value, [[${orderItem.id}]])"><label th:for="3rating+${orderItem.id}" title="3점"></label>
+                        <input type="radio" th:class="rating+${orderItem.id}" th:id="2rating+${orderItem.id}" name="rating" value="2" th:onchange="addRating(this.value, [[${orderItem.id}]])"><label th:for="2rating+${orderItem.id}" title="4점"></label>
+                        <input type="radio" th:class="rating+${orderItem.id}" th:id="1rating+${orderItem.id}" name="rating" value="1" th:onchange="addRating(this.value, [[${orderItem.id}]])"><label th:for="1rating+${orderItem.id}" title="5점"></label>
+                    </fieldset>
                 </div>
             </div>
         </div>
