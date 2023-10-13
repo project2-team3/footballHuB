@@ -1,4 +1,4 @@
-package com.shop.controller;
+package com.shop.controller.shop;
 
 import com.shop.dto.OrderDto;
 import com.shop.service.OrderService;
@@ -31,7 +31,7 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @PostMapping(value = "/order")
+    @PostMapping(value = "/shop/order")
     public @ResponseBody ResponseEntity order(@RequestBody @Valid OrderDto orderDto
             , BindingResult bindingResult, Principal principal){
 
@@ -58,7 +58,7 @@ public class OrderController {
         return new ResponseEntity<Long>(orderId, HttpStatus.OK);
     }
 
-    @GetMapping(value = {"/orders", "/orders/{page}"})
+    @GetMapping(value = {"/shop/orders", "/shop/orders/{page}"})
     public String orderHist(@PathVariable("page") Optional<Integer> page, Principal principal, Model model){
 
         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 4);
@@ -68,10 +68,10 @@ public class OrderController {
         model.addAttribute("page", pageable.getPageNumber());
         model.addAttribute("maxPage", 5);
 
-        return "order/orderHist";
+        return "shop/order/orderHist";
     }
 
-    @PostMapping("/order/{orderId}/cancel")
+    @PostMapping("/shop/order/{orderId}/cancel")
     public @ResponseBody ResponseEntity cancelOrder(@PathVariable("orderId") Long orderId , Principal principal){
 
         if(!orderService.validateOrder(orderId, principal.getName())){

@@ -1,4 +1,4 @@
-package com.shop.controller;
+package com.shop.controller.shop;
 
 import com.shop.dto.CategoryDto;
 import com.shop.service.CategoryService;
@@ -34,7 +34,7 @@ public class ItemController {
     private final ItemService itemService;
     private final CategoryService categoryService;
 
-    @GetMapping(value = "/admin/item/new")
+    @GetMapping(value = "/shop/admin/item/new")
     public String itemForm(Model model){
 
         List<CategoryDto> categoryDtoList = categoryService.getAllCategory();
@@ -44,7 +44,7 @@ public class ItemController {
         return "shop/item/itemForm";
     }
 
-    @PostMapping(value = "/admin/item/new")
+    @PostMapping(value = "/shop/admin/item/new")
     public String itemNew(@Valid ItemFormDto itemFormDto, BindingResult bindingResult,
                           Model model, @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList){
         if(bindingResult.hasErrors()){
@@ -63,10 +63,10 @@ public class ItemController {
             return "shop/item/itemForm";
         }
 
-        return "redirect:/";
+        return "redirect:/shop";
     }
 
-    @GetMapping(value = "/admin/item/{itemId}")
+    @GetMapping(value = "/shop/admin/item/{itemId}")
     public String itemDtl(@PathVariable("itemId") Long itemId, Model model){
 
         try {
@@ -81,7 +81,7 @@ public class ItemController {
         return "shop/item/itemForm";
     }
 
-    @PostMapping(value = "/admin/item/{itemId}")
+    @PostMapping(value = "/shop/admin/item/{itemId}")
     public String itemUpdate(@Valid ItemFormDto itemFormDto, BindingResult bindingResult,
                              @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList, Model model){
         if(bindingResult.hasErrors()){
@@ -100,10 +100,10 @@ public class ItemController {
             return "shop/item/itemForm";
         }
 
-        return "redirect:/";
+        return "redirect:/shop";
     }
 
-    @GetMapping(value = {"/admin/items", "/admin/items/{page}"})
+    @GetMapping(value = {"/shop/admin/items", "/shop/admin/items/{page}"})
     public String itemManage(ItemSearchDto itemSearchDto, @PathVariable("page") Optional<Integer> page, Model model){
 
         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 3);
@@ -116,7 +116,7 @@ public class ItemController {
         return "shop/item/itemMng";
     }
 
-    @GetMapping(value = "/item/{itemId}")
+    @GetMapping(value = "/shop/item/{itemId}")
     public String itemDtl(Model model, @PathVariable("itemId") Long itemId){
         ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
         model.addAttribute("item", itemFormDto);

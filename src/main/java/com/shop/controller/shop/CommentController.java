@@ -1,4 +1,4 @@
-package com.shop.controller;
+package com.shop.controller.shop;
 
 import com.shop.dto.CommentDto;
 import com.shop.entity.Comment;
@@ -26,7 +26,7 @@ public class CommentController {
 
     private final CommentRepository commentRepository;
 
-    @PostMapping(value="/comment")
+    @PostMapping(value="/shop/comment")
     public @ResponseBody ResponseEntity comment(@RequestBody @Valid CommentDto commentDto, BindingResult bindingResult, Principal principal) {
 
         String email = principal.getName();
@@ -39,7 +39,7 @@ public class CommentController {
         return new ResponseEntity<CommentDto>(savedCommentDto, HttpStatus.OK);
     }
 
-    @GetMapping(value="/comment/{itemId}")
+    @GetMapping(value="/shop/comment/{itemId}")
     public @ResponseBody ResponseEntity commentHist(@PathVariable("itemId") Long itemId) {
         List<CommentDto> commentDtoList = new ArrayList<>();
         List<Comment> commentList = commentRepository.findAll();

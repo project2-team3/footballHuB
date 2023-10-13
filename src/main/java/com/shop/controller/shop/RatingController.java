@@ -1,4 +1,4 @@
-package com.shop.controller;
+package com.shop.controller.shop;
 
 import com.shop.dto.CommentDto;
 import com.shop.dto.RatingDto;
@@ -21,7 +21,7 @@ public class RatingController {
 
     private final RatingService ratingService;
 
-    @PostMapping(value="/rating")
+    @PostMapping(value="/shop/rating")
     public @ResponseBody ResponseEntity addRating(@RequestBody @Valid RatingDto ratingDto, BindingResult bindingResult, Principal principal) {
 
 //        if(bindingResult.hasErrors()) {

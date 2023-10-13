@@ -1,4 +1,4 @@
-package com.shop.controller;
+package com.shop.controller.shop;
 import com.shop.dto.ItemSearchDto;
 import com.shop.dto.MainItemDto;
 import com.shop.service.ItemService;
