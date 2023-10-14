@@ -12,8 +12,8 @@
         <div class="container">
             <div id="responsive-nav">
                 <ul class="main-nav nav navbar-nav">
-                    <li><a href="#" class="active">All</a></li>
-                    <li th:each="categoryDto : ${categoryDtoList}"><a href="#" th:text="${categoryDto.name}"></a></li>
+                    <li><a href="/shop" class="active">All</a></li>
+<!--                    <li th:each="categoryDto : ${categoryDtoList}"><a th:href="@{'/shop' +'?category=' + ${categoryDto.name}" th:text="${categoryDto.name}"></a></li>-->
                 </ul>
             </div>
         </div>

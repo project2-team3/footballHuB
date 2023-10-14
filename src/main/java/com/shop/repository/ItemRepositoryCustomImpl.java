@@ -8,9 +8,9 @@ import com.shop.constant.ItemSellStatus;
 import com.shop.dto.ItemSearchDto;
 import com.shop.dto.MainItemDto;
 import com.shop.dto.QMainItemDto;
-import com.shop.entity.Item;
-import com.shop.entity.QItem;
-import com.shop.entity.QItemImg;
+import com.shop.entity.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -20,9 +20,12 @@ import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 
+//@RequiredArgsConstructor
 public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
 
     private JPAQueryFactory queryFactory;
+
+    CategoryRepository categoryRepository;
 
     public ItemRepositoryCustomImpl(EntityManager em){
         this.queryFactory = new JPAQueryFactory(em);
@@ -90,28 +93,36 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         return StringUtils.isEmpty(searchQuery) ? null : QItem.item.itemNm.like("%" + searchQuery + "%");
     }
 
+//    private BooleanExpression itemCategory(String categoryNm) {
+//        Category category = categoryRepository.findByName(categoryNm);
+//        return StringUtils.isEmpty(categoryNm) ? null : QItem.item.category.eq(category);
+//    }
+
     @Override
     public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
         QItem item = QItem.item;
         QItemImg itemImg = QItemImg.itemImg;
+        QCategory category = QCategory.category;
 
         List<MainItemDto> content = queryFactory
-                .select(
-                        new QMainItemDto(
-                                item.id,
-                                item.itemNm,
-                                item.itemDetail,
-                                itemImg.imgUrl,
-                                item.price)
-                )
-                .from(itemImg)
-                .join(itemImg.item, item)
-                .where(itemImg.repimgYn.eq("Y"))
-                .where(itemNmLike(itemSearchDto.getSearchQuery()))
-                .orderBy(item.id.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
+            .select(
+                new QMainItemDto(
+                    item.id,
+                    item.itemNm,
+                    item.itemDetail,
+                    itemImg.imgUrl,
+                    item.price,
+                    item.category)
+            )
+            .from(itemImg)
+            .join(itemImg.item, item)
+            .where(itemImg.repimgYn.eq("Y"))
+            .where(itemNmLike(itemSearchDto.getSearchQuery()))
+//            .where(itemCategory(itemSearchDto.getCategory()))
+            .orderBy(item.id.desc())
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
 
         long total = queryFactory
                 .select(Wildcard.count)
