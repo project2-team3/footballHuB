@@ -1,7 +1,7 @@
 /* Base */
 body {
   line-height: 1.7;
-  color: gray;
+  color: white;
   font-weight: 300;
   background-color: #222831;
   font-size: 16px; }
@@ -275,7 +275,7 @@ h1, h2, h3, h4, h5,
 /* Navbar */
 .site-logo {
   position: relative;
-  font-weight: 900;
+  font-weight: 100;
   font-size: 1.3rem; }
   .site-logo a {
     color: #fff; }
@@ -850,6 +850,10 @@ h1, h2, h3, h4, h5,
         font-weight: 700;
         font-size: 18px; }
 
+      /*추가한 부분 ( 잘 안됨 )*/
+/*.widget-matches { */
+/*  border: 1px solid rgba(255, 255, 255, 0.1); }*/
+
 .widget-next-match {
   border: 1px solid rgba(255, 255, 255, 0.1); }
 
@@ -917,7 +921,7 @@ h1, h2, h3, h4, h5,
     border: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
     .custom-table tbody tr td strong {
-      font-weight: 400; }
+      font-weight: 400;}
   .custom-table tbody tr:last-child td {
     border: none; }
 
@@ -1117,16 +1121,3 @@ h1, h2, h3, h4, h5,
   .post-meta a {
     color: #fff;
     border-bottom: 1px solid rgba(255, 255, 255, 0.5); }
-
-/*
-custom by jiyoon
-*/
-.login-form-container {
-    width: 40%;
-    border-radius: 5%;
-    padding: 20px;
-    float: right;
-    position: relative;
-    top: 84px;
-    right: 50px;
-}
