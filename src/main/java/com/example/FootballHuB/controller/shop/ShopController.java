@@ -1,9 +1,9 @@
-package com.shop.controller.shop;
-import com.shop.dto.CategoryDto;
-import com.shop.dto.ItemSearchDto;
-import com.shop.dto.MainItemDto;
-import com.shop.service.CategoryService;
-import com.shop.service.ItemService;
+package com.example.FootballHuB.controller.shop;
+import com.example.FootballHuB.dto.CategoryDto;
+import com.example.FootballHuB.dto.ItemSearchDto;
+import com.example.FootballHuB.dto.MainItemDto;
+import com.example.FootballHuB.service.CategoryService;
+import com.example.FootballHuB.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
