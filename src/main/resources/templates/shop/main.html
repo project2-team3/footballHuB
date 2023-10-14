@@ -23,7 +23,7 @@
             <div class="row">
                 <th:block th:each="item, status: ${items.getContent()}">
                     <div class="col-md-3 col-xs-4">
-                        <a th:href="'/item/' +${item.id}">
+                        <a th:href="'/shop/item/' +${item.id}">
                             <div class="product">
                                 <div class="product-img">
                                     <img th:src="${item.imgUrl}" th:alt="${item.itemNm}">
