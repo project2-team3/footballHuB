@@ -4,7 +4,8 @@ body {
   color: gray;
   font-weight: 300;
   background-color: #222831;
-  font-size: 16px; }
+  font-size: 16px;
+}
 
 ::-moz-selection {
   background: #000;
