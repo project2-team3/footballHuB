@@ -174,7 +174,7 @@
                     </div>
                 </div>
                 <div>
-                    <fieldset th:class="'rate rate' + ${orderItem.id}" th:if="${order.orderStatus == T(com.shop.constant.OrderStatus).ORDER}">
+                    <fieldset th:class="'rate rate' + ${orderItem.id}" th:if="${order.orderStatus == T(com.example.FootballHuB.constant.OrderStatus).ORDER}">
                         <input type="radio" th:class="rating+${orderItem.id}" th:id="5rating+${orderItem.id}" name="rating" value="5" th:onchange="addRating(this.value, [[${orderItem.id}]])"><label th:for="5rating+${orderItem.id}" title="1점"></label>
                         <input type="radio" th:class="rating+${orderItem.id}" th:id="4rating+${orderItem.id}" name="rating" value="4" th:onchange="addRating(this.value, [[${orderItem.id}]])"><label th:for="4rating+${orderItem.id}" title="2점"></label>
                         <input type="radio" th:class="rating+${orderItem.id}" th:id="3rating+${orderItem.id}" name="rating" value="3" th:onchange="addRating(this.value, [[${orderItem.id}]])"><label th:for="3rating+${orderItem.id}" title="3점"></label>

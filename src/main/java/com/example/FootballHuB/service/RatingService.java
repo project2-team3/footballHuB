@@ -1,14 +1,14 @@
-package com.shop.service;
+package com.example.FootballHuB.service;
 
-import com.shop.dto.RatingDto;
-import com.shop.entity.Item;
-import com.shop.entity.Member;
-import com.shop.entity.OrderItem;
-import com.shop.entity.Rating;
-import com.shop.repository.ItemRepository;
-import com.shop.repository.MemberRepository;
-import com.shop.repository.OrderItemRepository;
-import com.shop.repository.RatingRepository;
+import com.example.FootballHuB.dto.RatingDto;
+import com.example.FootballHuB.entity.Item;
+import com.example.FootballHuB.entity.Member;
+import com.example.FootballHuB.entity.OrderItem;
+import com.example.FootballHuB.entity.Rating;
+import com.example.FootballHuB.repository.ItemRepository;
+import com.example.FootballHuB.repository.MemberRepository;
+import com.example.FootballHuB.repository.OrderItemRepository;
+import com.example.FootballHuB.repository.RatingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,12 +1,12 @@
-package com.shop.service;
+package com.example.FootballHuB.service;
 
-import com.shop.dto.ItemFormDto;
-import com.shop.entity.Category;
-import com.shop.entity.Item;
-import com.shop.entity.ItemImg;
-import com.shop.repository.CategoryRepository;
-import com.shop.repository.ItemImgRepository;
-import com.shop.repository.ItemRepository;
+import com.example.FootballHuB.dto.ItemFormDto;
+import com.example.FootballHuB.entity.Category;
+import com.example.FootballHuB.entity.Item;
+import com.example.FootballHuB.entity.ItemImg;
+import com.example.FootballHuB.repository.CategoryRepository;
+import com.example.FootballHuB.repository.ItemImgRepository;
+import com.example.FootballHuB.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,15 +14,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import com.shop.dto.ItemImgDto;
+import com.example.FootballHuB.dto.ItemImgDto;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 
-import com.shop.dto.ItemSearchDto;
+import com.example.FootballHuB.dto.ItemSearchDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.shop.dto.MainItemDto;
+import com.example.FootballHuB.dto.MainItemDto;
 
 @Service
 @Transactional

@@ -1,11 +1,8 @@
-<<<<<<<< HEAD:src/main/java/com/example/FootballHuB/controller/ItemController.java
-package com.example.FootballHuB.controller;
-========
-package com.shop.controller.shop;
->>>>>>>> origin/master:src/main/java/com/shop/controller/shop/ItemController.java
+package com.example.FootballHuB.controller.shop;
 
-import com.shop.dto.CategoryDto;
-import com.shop.service.CategoryService;
+
+import com.example.FootballHuB.dto.CategoryDto;
+import com.example.FootballHuB.service.CategoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 

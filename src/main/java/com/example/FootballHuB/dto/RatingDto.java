@@ -1,6 +1,6 @@
-package com.shop.dto;
+package com.example.FootballHuB.dto;
 
-import com.shop.entity.Rating;
+import com.example.FootballHuB.entity.Rating;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

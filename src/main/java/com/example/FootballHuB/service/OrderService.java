@@ -1,8 +1,8 @@
-package com.shop.service;
+package com.example.FootballHuB.service;
 
-import com.shop.dto.OrderDto;
-import com.shop.entity.*;
-import com.shop.repository.*;
+import com.example.FootballHuB.dto.OrderDto;
+import com.example.FootballHuB.entity.*;
+import com.example.FootballHuB.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,8 +11,8 @@ import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.shop.dto.OrderHistDto;
-import com.shop.dto.OrderItemDto;
+import com.example.FootballHuB.dto.OrderHistDto;
+import com.example.FootballHuB.dto.OrderItemDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

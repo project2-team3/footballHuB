@@ -1,8 +1,5 @@
-<<<<<<<< HEAD:src/main/java/com/example/FootballHuB/controller/OrderController.java
-package com.example.FootballHuB.controller;
-========
-package com.shop.controller.shop;
->>>>>>>> origin/master:src/main/java/com/shop/controller/shop/OrderController.java
+package com.example.FootballHuB.controller.shop;
+
 
 import com.example.FootballHuB.dto.OrderDto;
 import com.example.FootballHuB.service.OrderService;

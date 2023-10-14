@@ -1,4 +1,4 @@
-package com.shop.constant;
+package com.example.FootballHuB.constant;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

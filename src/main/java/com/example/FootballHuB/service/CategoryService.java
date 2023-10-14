@@ -1,8 +1,8 @@
-package com.shop.service;
+package com.example.FootballHuB.service;
 
-import com.shop.dto.CategoryDto;
-import com.shop.entity.Category;
-import com.shop.repository.CategoryRepository;
+import com.example.FootballHuB.dto.CategoryDto;
+import com.example.FootballHuB.entity.Category;
+import com.example.FootballHuB.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

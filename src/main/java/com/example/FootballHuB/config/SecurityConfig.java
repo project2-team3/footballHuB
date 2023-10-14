@@ -1,7 +1,7 @@
-package com.shop.config;
+package com.example.FootballHuB.config;
 
-import com.shop.service.MemberService;
-import com.shop.service.PrincipalOauth2UserService;
+import com.example.FootballHuB.service.MemberService;
+import com.example.FootballHuB.service.PrincipalOauth2UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

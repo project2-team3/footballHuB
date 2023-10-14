@@ -1,6 +1,6 @@
-package com.shop.entity;
+package com.example.FootballHuB.entity;
 
-import com.shop.repository.CategoryRepository;
+import com.example.FootballHuB.repository.CategoryRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

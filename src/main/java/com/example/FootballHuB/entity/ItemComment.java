@@ -1,4 +1,4 @@
-package com.shop.entity;
+package com.example.FootballHuB.entity;
 
 import lombok.Getter;
 import lombok.Setter;

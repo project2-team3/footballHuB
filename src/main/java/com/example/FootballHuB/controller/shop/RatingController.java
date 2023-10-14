@@ -1,8 +1,8 @@
-package com.shop.controller.shop;
+package com.example.FootballHuB.controller.shop;
 
-import com.shop.dto.CommentDto;
-import com.shop.dto.RatingDto;
-import com.shop.service.RatingService;
+import com.example.FootballHuB.dto.CommentDto;
+import com.example.FootballHuB.dto.RatingDto;
+import com.example.FootballHuB.service.RatingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

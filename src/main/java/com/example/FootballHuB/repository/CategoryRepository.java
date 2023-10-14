@@ -1,7 +1,7 @@
-package com.shop.repository;
+package com.example.FootballHuB.repository;
 
-import com.shop.entity.Category;
-import com.shop.entity.Item;
+import com.example.FootballHuB.entity.Category;
+import com.example.FootballHuB.entity.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

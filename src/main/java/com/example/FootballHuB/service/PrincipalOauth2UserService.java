@@ -1,9 +1,9 @@
-package com.shop.service;
+package com.example.FootballHuB.service;
 
-import com.shop.dto.PrincipalDetails;
-import com.shop.dto.MemberFormDto;
-import com.shop.entity.Member;
-import com.shop.repository.MemberRepository;
+import com.example.FootballHuB.dto.PrincipalDetails;
+import com.example.FootballHuB.dto.MemberFormDto;
+import com.example.FootballHuB.entity.Member;
+import com.example.FootballHuB.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

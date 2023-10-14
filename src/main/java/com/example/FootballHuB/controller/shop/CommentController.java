@@ -1,10 +1,10 @@
-package com.shop.controller.shop;
+package com.example.FootballHuB.controller.shop;
 
-import com.shop.dto.CommentDto;
-import com.shop.entity.Comment;
-import com.shop.entity.Item;
-import com.shop.repository.CommentRepository;
-import com.shop.service.CommentService;
+import com.example.FootballHuB.dto.CommentDto;
+import com.example.FootballHuB.entity.Comment;
+import com.example.FootballHuB.entity.Item;
+import com.example.FootballHuB.repository.CommentRepository;
+import com.example.FootballHuB.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
-package com.shop.repository;
+package com.example.FootballHuB.repository;
 
-import com.shop.entity.Rating;
+import com.example.FootballHuB.entity.Rating;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RatingRepository extends JpaRepository<Rating, Long> {
