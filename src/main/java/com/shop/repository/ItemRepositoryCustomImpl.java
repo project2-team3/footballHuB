@@ -9,6 +9,7 @@ import com.shop.dto.ItemSearchDto;
 import com.shop.dto.MainItemDto;
 import com.shop.dto.QMainItemDto;
 import com.shop.entity.*;
+import com.shop.service.RatingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,14 +19,17 @@ import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
-//@RequiredArgsConstructor
 public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
 
     private JPAQueryFactory queryFactory;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
-    CategoryRepository categoryRepository;
+    @Autowired
+    private RatingService ratingService;
 
     public ItemRepositoryCustomImpl(EntityManager em){
         this.queryFactory = new JPAQueryFactory(em);
@@ -93,16 +97,15 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         return StringUtils.isEmpty(searchQuery) ? null : QItem.item.itemNm.like("%" + searchQuery + "%");
     }
 
-//    private BooleanExpression itemCategory(String categoryNm) {
-//        Category category = categoryRepository.findByName(categoryNm);
-//        return StringUtils.isEmpty(categoryNm) ? null : QItem.item.category.eq(category);
-//    }
+    private BooleanExpression itemCategory(String categoryNm) {
+        Category category = categoryRepository.findByName(categoryNm);
+        return StringUtils.isEmpty(categoryNm) ? null : QItem.item.category.eq(category);
+    }
 
     @Override
     public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
         QItem item = QItem.item;
         QItemImg itemImg = QItemImg.itemImg;
-        QCategory category = QCategory.category;
 
         List<MainItemDto> content = queryFactory
             .select(
@@ -118,7 +121,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
             .join(itemImg.item, item)
             .where(itemImg.repimgYn.eq("Y"))
             .where(itemNmLike(itemSearchDto.getSearchQuery()))
-//            .where(itemCategory(itemSearchDto.getCategory()))
+            .where(itemCategory(itemSearchDto.getCategory()))
             .orderBy(item.id.desc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
@@ -133,6 +136,9 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
                 .fetchOne()
                 ;
 
+        for(MainItemDto mainItemDto : content) {
+            mainItemDto.setRating(ratingService.getAveByItemId(mainItemDto.getId()));
+        }
         return new PageImpl<>(content, pageable, total);
     }
 

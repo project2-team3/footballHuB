@@ -6,7 +6,6 @@
 <head>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <link rel="stylesheet" th:href="@{/css/rate.css}" />
 </head>
 
 <!-- 사용자 스크립트 추가 -->
@@ -47,7 +46,7 @@
             var param = JSON.stringify(paramData);
 
             $.ajax({
-                url      : "/rating",
+                url      : "/shop/rating",
                 type     : "POST",
                 contentType : "application/json",
                 data     : param,
@@ -73,7 +72,7 @@
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
 
-            var url = "/order/" + orderId + "/cancel";
+            var url = "/shop/order/" + orderId + "/cancel";
             var paramData = {
                 orderId : orderId,
             };
