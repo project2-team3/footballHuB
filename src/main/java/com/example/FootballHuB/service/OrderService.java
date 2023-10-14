@@ -1,12 +1,8 @@
-package com.example.FootballHuB.service;
+package com.shop.service;
 
-import com.example.FootballHuB.entity.*;
-import com.example.FootballHuB.repository.ItemImgRepository;
-import com.example.FootballHuB.repository.ItemRepository;
-import com.example.FootballHuB.repository.MemberRepository;
-import com.example.FootballHuB.repository.OrderRepository;
-import com.example.FootballHuB.dto.OrderDto;
-import com.example.FootballHuB.entity.OrderItem;
+import com.shop.dto.OrderDto;
+import com.shop.entity.*;
+import com.shop.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,8 +11,8 @@ import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.FootballHuB.dto.OrderHistDto;
-import com.example.FootballHuB.dto.OrderItemDto;
+import com.shop.dto.OrderHistDto;
+import com.shop.dto.OrderItemDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -35,6 +31,8 @@ public class OrderService {
     private final OrderRepository orderRepository;
 
     private final ItemImgRepository itemImgRepository;
+
+    private final RatingRepository ratingRepository;
 
     public Long order(OrderDto orderDto, String email){
 
@@ -57,6 +55,7 @@ public class OrderService {
 
         List<Order> orders = orderRepository.findOrders(email, pageable);
         Long totalCount = orderRepository.countOrder(email);
+        Member member = memberRepository.findByEmail(email);
 
         List<OrderHistDto> orderHistDtos = new ArrayList<>();
 
@@ -64,10 +63,15 @@ public class OrderService {
             OrderHistDto orderHistDto = new OrderHistDto(order);
             List<OrderItem> orderItems = order.getOrderItems();
             for (OrderItem orderItem : orderItems) {
+                Rating rating = ratingRepository.findByMemberIdAndOrderItemId(member.getId(), orderItem.getId());
+                String grade = null;
+                if (rating != null) {
+                    grade = rating.getGrade();
+                }
                 ItemImg itemImg = itemImgRepository.findByItemIdAndRepimgYn
                         (orderItem.getItem().getId(), "Y");
                 OrderItemDto orderItemDto =
-                        new OrderItemDto(orderItem, itemImg.getImgUrl());
+                        new OrderItemDto(orderItem, itemImg.getImgUrl(), grade);
                 orderHistDto.addOrderItemDto(orderItemDto);
             }
 

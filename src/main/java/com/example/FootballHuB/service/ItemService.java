@@ -1,10 +1,12 @@
-package com.example.FootballHuB.service;
+package com.shop.service;
 
-import com.example.FootballHuB.repository.ItemImgRepository;
-import com.example.FootballHuB.repository.ItemRepository;
-import com.example.FootballHuB.dto.ItemFormDto;
-import com.example.FootballHuB.entity.Item;
-import com.example.FootballHuB.entity.ItemImg;
+import com.shop.dto.ItemFormDto;
+import com.shop.entity.Category;
+import com.shop.entity.Item;
+import com.shop.entity.ItemImg;
+import com.shop.repository.CategoryRepository;
+import com.shop.repository.ItemImgRepository;
+import com.shop.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,15 +14,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import com.example.FootballHuB.dto.ItemImgDto;
+import com.shop.dto.ItemImgDto;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 
-import com.example.FootballHuB.dto.ItemSearchDto;
+import com.shop.dto.ItemSearchDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.example.FootballHuB.dto.MainItemDto;
+import com.shop.dto.MainItemDto;
 
 @Service
 @Transactional
@@ -33,10 +35,14 @@ public class ItemService {
 
     private final ItemImgRepository itemImgRepository;
 
+    private final CategoryRepository categoryRepository;
+
     public Long saveItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception{
 
         //상품 등록
         Item item = itemFormDto.createItem();
+        Category category = categoryRepository.findByName(itemFormDto.getCategoryName());
+        item.setCategory(category);
         itemRepository.save(item);
 
         //이미지 등록

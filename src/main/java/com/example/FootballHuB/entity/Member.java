@@ -8,6 +8,9 @@ import lombok.ToString;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="member")
@@ -32,6 +35,14 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    private String provider;
+
+    private String providerId;
+
+//    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+//    private List<ItemComment> itemComments = new ArrayList<>();
+
+
     public static Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder){
         Member member = new Member();
         member.setName(memberFormDto.getName());
@@ -42,5 +53,7 @@ public class Member extends BaseEntity {
         member.setRole(Role.ADMIN);
         return member;
     }
-
+    public String getRoleValue() {
+        return this.role.getValue();
+    }
 }
