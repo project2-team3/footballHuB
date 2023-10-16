@@ -1,8 +1,8 @@
 package com.example.FootballHuB.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
-import com.shop.entity.Category;
-import com.shop.entity.Rating;
+import com.example.FootballHuB.entity.Category;
+import com.example.FootballHuB.entity.Rating;
 import lombok.Getter;
 import lombok.Setter;
 
