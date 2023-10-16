@@ -21,7 +21,7 @@ public class MainItemDto {
 
     private Category category;
 
-    private double rating;
+//    private double rating;
 
 //    private Long rating;
 
