@@ -75,10 +75,10 @@
 </th:block>
 
 <div layout:fragment="content">
-  <div class="hero overlay" style="background-image: url('../imgs/bg_3.jpg')">
+  <div class="hero overlay" style="background-image: url('/images/bg_3.jpg')">
     <div class="login-form-container">
       <h3 style="color: #495057; text-align: center; margin-bottom: 1rem;">로그인</h3>
-      <button type="button" class="btn btn-outline-dark google-btn" onClick="location.href='/oauth2/authorization/google'"><img width="20px" height="20px" th:src="@{/imgs/google.png}" alt="google-logo" />Continue with Google</button>
+      <button type="button" class="btn btn-outline-dark google-btn" onClick="location.href='/oauth2/authorization/google'"><img width="20px" height="20px" th:src="@{/images/google.png}" alt="google-logo" />Continue with Google</button>
       <div class="line">or</div>
       <form role="form" method="post" action="/members/login">
         <div class="form-group">

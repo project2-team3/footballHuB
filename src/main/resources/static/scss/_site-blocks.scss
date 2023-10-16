@@ -290,9 +290,12 @@
 	} 
 }
 
+//추가한 부분(잘 안됨)
+//.widget-matches {
+//	border: 5px solid rgba($primary, .1);
+//}
 .widget-next-match {
 	border: 1px solid rgba($white, .1);
-	
 }
 .widget-vs {
 	width: 100%;
