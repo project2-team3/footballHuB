@@ -62,20 +62,13 @@
                             stompClient.connect({}, function (frame) {
 
 
-
                                 //subscribe(subscribe url,해당 url로 메시지를 받을때마다 실행할 함수)
                                 sub = stompClient.subscribe('/topic/1', function (e) {
                                     //e.body에 전송된 data가 들어있다
                                     showMessage(JSON.parse(e .body));
 
                                 });
-                            },
-
-                <!--            function(e){-->  //이거를 메세지 보내기 누르면 로그인해주세요 뜨게 해야겟다.
-                <!--                //에러 콜백-->
-                <!--                alert('로그인 해주세요');-->
-                <!--            }-->
-                        );
+                            });
                     }
 
                     connect();
@@ -660,7 +653,7 @@
         }
 
         .other{
-           color: red
+           color: red;
            text-align:right;
         }
         #date {
