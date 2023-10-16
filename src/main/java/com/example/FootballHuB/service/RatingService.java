@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 @Service
 @Transactional
@@ -37,9 +38,18 @@ public class RatingService {
         }
     }
 
-    public void deleteRating(Long ratingId) {
-//        Rating rating = ratingRepository.findById(ratingId);
+    public double getAveByItemId(Long itemId) {
+        double sum = 0;
+        int count = 0;
+        List<OrderItem> orderItemList = orderItemRepository.findByItemId(itemId);
+        for (OrderItem orderItem : orderItemList) {
+            List<Rating> ratingList = ratingRepository.findByOrderItemId(orderItem.getId());
+            for (Rating rating : ratingList) {
+                sum += Integer.parseInt(rating.getGrade());
+                count++;
+            }
+        }
 
-
+        return sum/count;
     }
 }

@@ -7,13 +7,61 @@
 <th:block layout:fragment="css">
 </th:block>
 
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        $(document).ready(function() {
+            activeCategory();
+            fillRating();
+        });
+        function fillRating() {
+            const items = [[${items.getContent()}]];
+            for(let i = 0; i < items.length; i++) {
+                const item = items[i];
+                if(isNaN(item.rating)) { continue; }
+                const rating = Math.ceil(parseInt(item.rating));
+                const $fieldset = document.querySelector(".rate"+item.id);
+                const labelList = $fieldset?.querySelectorAll("label");
+
+                let tag = false;
+                for (let i = labelList.length-1; i >= 0; i--) {
+                    const label = labelList[i];
+                    label.style.color = tag ? '#ddd' : '#f73c32';
+                    if (label.htmlFor[0] == rating) {
+                        tag = true;
+                    }
+                }
+            }
+        }
+        function activeCategory() {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const category = urlParams.get('category');
+            if(!category) {
+                $('#nav-all')[0].classList.add('active');
+                return;
+            }
+            const navList = $('.nav-list');
+            for(let i = 0; i < navList.length; i++) {
+               if (navList[i].id === 'nav-'+category) {
+                    navList[i].classList.add('active');
+                    break;
+                }
+            }
+        }
+    </script>
+</th:block>
+
 <div layout:fragment="content">
     <nav id="navigation">
         <div class="container">
             <div id="responsive-nav">
                 <ul class="main-nav nav navbar-nav">
-                    <li><a href="#" class="active">All</a></li>
-                    <li th:each="categoryDto : ${categoryDtoList}"><a href="#" th:text="${categoryDto.name}"></a></li>
+                    <li class="nav-list" id="nav-all"><a href="/shop">All</a></li>
+                    <li class="nav-list" th:id="'nav-'+${categoryDto.name}" th:each="categoryDto : ${categoryDtoList}">
+                        <a th:href="@{'/shop?category='+${categoryDto.name}}" th:inline="text" >
+                            [[${categoryDto.name}]]
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -31,12 +79,14 @@
                                 <div class="product-body">
                                     <h3 class="product-name"><a href="#">[[${item.itemNm}]]</a></h3>
                                     <h4 class="product-price">[[${item.price}]]원</h4>
-                                    <div class="product-rating">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
+                                    <div>
+                                        <fieldset th:class="'rate rate' + ${item.id}">
+                                            <input disabled type="radio" th:class="rating+${item.id}" th:id="5rating+${item.id}" name="rating" value="5"><label th:for="5rating+${item.id}" title="1점"></label>
+                                            <input disabled type="radio" th:class="rating+${item.id}" th:id="4rating+${item.id}" name="rating" value="4"><label th:for="4rating+${item.id}" title="2점"></label>
+                                            <input disabled type="radio" th:class="rating+${item.id}" th:id="3rating+${item.id}" name="rating" value="3"><label th:for="3rating+${item.id}" title="3점"></label>
+                                            <input disabled type="radio" th:class="rating+${item.id}" th:id="2rating+${item.id}" name="rating" value="2"><label th:for="2rating+${item.id}" title="4점"></label>
+                                            <input disabled type="radio" th:class="rating+${item.id}" th:id="1rating+${item.id}" name="rating" value="1"><label th:for="1rating+${item.id}" title="5점"></label>
+                                        </fieldset>
                                     </div>
                                 </div>
                                 <div class="add-to-cart">
