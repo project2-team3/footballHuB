@@ -330,53 +330,65 @@
     </div>
     <!-- /CART OPTION -->
 
-    <!-- SECTION -->
-    <div class="section">
-        <!-- inner-content -->
-        <div class="inner-content">
-            <!-- cart-list -->
-            <ol class="cart-list">
-                <li class="cart-basket">
-                    <div th:each="cartItem : ${cartItems}">
-                        <div class="item-check">
-                            <label>
-                                <input type="checkbox" name="cartChkBox" th:value="${cartItem.cartItemId}">
-                            </label>
+    <!-- CART BODY -->
+    <div id="cart-body">
+        <div class="inner-cont">
+            <div id="cart-list">
+                <h3 class="hidden">나의 장바구니 목록</h3>
+                <ol class="basket-list-group">
+                    <li class="cart-basket" th:each="cartItem : ${cartItems}">
+                        <div class="cart-basket-body">
+                            <div class="shipping-no-group">
+                                <ul class="order-list">
+                                    <li class="order-idx">
+                                        <div class="item">
+                                           <div class="item-check">
+                                               <div class="item-check">
+                                                   <span class="input-checkbox">
+                                                       <input type="checkbox" name="cartChkBox" th:value="${cartItem.cartItemId}">
+                                                       <label th:for="${cartItem.cartItemId}" class="hidden">상품 선택</label>
+                                                   </span>
+                                               </div>
+                                               <div class="item-img">
+                                                   <a th:href="@{/shop/item/{itemId}(itemId=${cartItem.itemId})">
+                                                       <img th:src="${cartItem.imgUrl}" th:alt="${cartItem.itemNm}">
+                                                   </a>
+                                               </div>
+                                               <div class="item-info">
+                                                   <dl class="unit-item first">
+                                                       <dd class="unit-item-desc" th:id="'cart-unit-' + ${cartItem.itemId}">
+                                                           <div class="section item-title">
+                                                               <a th:href="@{/shop/item/{itemId}(itemId=${cartItem.itemId})}">
+                                                                   <strong class="hidden">상품명:</strong>
+                                                                   <span class="item-name" th:text="${cartItem.itemNm}"></span>
+                                                               </a>
+                                                           </div>
+                                                           <div class="section-wrapper">
+                                                               <div class="section-item-left">
+                                                                   <div class="section item-qty">
+                                                                       <b class="hidden">상품수량</b>
+                                                                       <div class="item-qty-wrap">
+                                                                           <input class="item-qty-count" th:id="'count-' + ${cartItem.cartItemId}"  type="number"
+                                                                           th:value="${cartItem.count}" min="1" onchange="changeCount(this)" pattern="\d*">
+                                                                       </div>
+                                                                   </div>
+                                                               </div>
+                                                           </div>
+                                                       </dd>
+                                                   </dl>
+                                               </div>
+                                           </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                        <div class="repImgDiv">
-                            <a th:href="@{shop/item/{itemId}">
-                                <img th:src="${cartItem.imgUrl}" class="rounded repImg" th:alt="${cartItem.itemNm}">
-                            </a>
-                        </div>
-                        <div class="item-info">
-<!--                            <a th:href="@{'/shop/item/' + ${itemId}}">-->
-<!--                                <span th:text="${cartItem.itemNm}"></span>-->
-<!--                            </a>-->
-                        </div>
-                        <div class="item-qty">
-                            <input class="item-qty-count" type="number" name="count" th:id="'count_' + ${cartItem.cartItemId}"
-                                   th:value="${cartItem.count}" min="1" max="50" pattern="\d*">
-                            <button class="btn-plus" onclick='count("plus")' value='+'>
-                                <i class="icon btn-qty-plus"></i>
-                            </button>
-                            <button class="btn-minus" onclick='count("minus")' value='-'>
-                                <i class="icon btn-qty-minus"></i>
-                            </button>
-                        </div>
-                        <div class="item-price">
-                            <span th:id="'price_' + ${cartItem.cartItemId}"
-                                  th:data-price="${cartItem.price}"
-                                  th:text="${cartItem.price}" class="strong"></span>
-                            <span>원</span>
-                        </div>
-                    </div>
-                </li>
-            </ol>
-            <!-- /cart-list -->
+                    </li>
+                </ol>
+            </div>
         </div>
-        <!-- /inner-content -->
     </div>
-    <!-- /SECTION -->
+    <!-- /CART BODY -->
 
 </div>
 
