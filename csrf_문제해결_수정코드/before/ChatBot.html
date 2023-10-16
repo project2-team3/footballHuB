@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+
+<head>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+    <style>
+        #chatbot-box {
+            height: 90%;        /* 채팅창 높이 설정 */
+            width: 100%;        /* 채팅창 넓이 설정 */
+            overflow-y: auto;   /* 세로 스크롤 가능하도록 설정 */
+            padding: 10px;      /* 내부 패딩 추가 */
+        }
+        .message-content {
+            margin: 30px 0;     /* 메시지 간격 설정 */
+        }
+        .message-content img {
+            height: 80px;       /* 이미지 높이 설정 */
+            width: 100px;       /* 이미지 너비 설정 */
+        }
+    </style>
+</head>
+
+
+
+<body>
+<h1>메시</h1>
+
+<div id="chatBot" class="">
+
+<div id="chatPopup" class="hidden">
+    <div id="chatbot-box"></div>
+    <input type="text" id="user-input" placeholder="메시지를 입력하세요..." onkeydown="handleKeyPress(event)" >
+</div>
+</div>
+
+
+<script>
+
+    var enterEnabled = true; // 엔터키 상태를 저장할 변수
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+
+
+    // /chat에 메시지를 보내고, ChatBotresponse 사용하여 챗봇 응답받기
+    function sendMessage() {
+        if (!enterEnabled) {
+            return; // 엔터키가 비활성화 상태에서는 아무 동작도 하지 않음
+        }
+        enterEnabled = false;
+
+
+        // 사용자 입력 가져오기
+        var userMessage = document.getElementById("user-input").value;
+        appendMessage("사용자: " + userMessage);
+
+        appendGptMessage("음.....",'wait');
+
+
+        // Java 컨트롤러로 데이터 보내기
+        $(function() {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            if (token && header) {
+                $(document).ajaxSend(function(e, xhr, options) {
+                    xhr.setRequestHeader(header, token);
+                });
+            }
+        });
+
+
+        $.ajax({
+            type: 'POST',
+            url: '/ChatBot',
+            data: JSON.stringify({ message: userMessage }),
+            dataType: 'json',
+
+            success: function(data) {
+                document.getElementById('chatbot-box').lastChild.remove();
+                if (typeof data === 'string') {
+                    appendGptMessage(data);                 // 서버에서 문자열 응답을 반환한 경우
+                } else {
+                    appendGptMessage(data.response);        // 서버에서 JSON 응답을 받았을 경우
+                }
+                document.getElementById('user-input').value = ''; // 입력창 초기화;
+                enterEnabled = true;
+                xhr = null;
+            },
+            error: function(xhr, status, error) {
+                alert("error");
+                alert(error);
+                xhr = null;
+            }
+        });
+
+    }
+
+
+
+    // chat-box에 사용자 메시지 추가
+    function appendMessage(message) {
+        var chatbotBox = document.getElementById("chatbot-box");
+        var messageElement = document.createElement("div");
+        messageElement.textContent = message;
+        messageElement.classList.add("chat-message");
+        chatbotBox.appendChild(messageElement);
+        chatbotBox.scrollTop = chatbotBox.scrollHeight;
+    }
+
+    // chat-box에 gpt응답 메시지 추가
+    function appendGptMessage(message,status) {
+        var chatbotBox = document.getElementById("chatbot-box");
+
+        var messageElement = document.createElement("div");
+        messageElement.classList.add("chat-message");
+
+        var messageContent = document.createElement("div");
+        messageContent.classList.add("message-content");
+
+        var messageImage = document.createElement("img");
+        if (status=='wait'){
+            messageImage.src = "/images/messi_wait.jpg";
+            messageImage.alt = "메시 고민";}
+        else {
+        messageImage.src = "/images/messi_answer.jpg";
+        messageImage.alt = "메시 대답";}
+
+        var messageText = document.createElement("span");
+        messageText.textContent = message;
+
+        messageContent.appendChild(messageImage);
+        messageContent.appendChild(messageText);
+        messageElement.appendChild(messageContent);
+        chatbotBox.appendChild(messageElement);
+
+        chatbotBox.scrollTop = chatbotBox.scrollHeight; // 스크롤 아래로 이동
+    }
+
+
+    //----------------------------이벤트 핸들러----------------------------
+    // 엔터키 활성화
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            sendMessage()
+        }
+    }
+
+
+</script>
+</body>
+</html>
