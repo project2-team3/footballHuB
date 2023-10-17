@@ -3,9 +3,6 @@ package com.example.FootballHuB.controller;
 import com.example.FootballHuB.dto.MemberFormDto;
 import com.example.FootballHuB.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,10 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
-import java.util.Map;
 
 @RequestMapping("/members")
 @Controller

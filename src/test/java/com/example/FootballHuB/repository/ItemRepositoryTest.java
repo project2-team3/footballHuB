@@ -2,6 +2,7 @@ package com.example.FootballHuB.repository;
 
 import com.example.FootballHuB.constant.ItemSellStatus;
 import com.example.FootballHuB.entity.Item;
+import com.example.FootballHuB.entity.QItem;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import java.util.List;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.querydsl.jpa.impl.JPAQuery;
-import com.example.FootballHuB.entity.QItem;
+
 import javax.persistence.PersistenceContext;
 import javax.persistence.EntityManager;
 

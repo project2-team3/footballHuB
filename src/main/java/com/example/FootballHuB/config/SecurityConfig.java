@@ -42,7 +42,7 @@ public class SecurityConfig {
         http.authorizeRequests()
                 .antMatchers("/chatting/**").permitAll()
                 .mvcMatchers("/css/**", "/js/**", "/imgs/**", "/img/**", "/scss/**", "/fonts/**").permitAll()
-                .mvcMatchers("/", "/members/**", "/item/**", "/images/**", "/shop/**", "/comment/**", "/static/**").permitAll()
+                .mvcMatchers("/", "/members/**", "/shop/item/**", "/images/**", "/shop/**", "/comment/**", "/static/**").permitAll()
                 .mvcMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
         ;

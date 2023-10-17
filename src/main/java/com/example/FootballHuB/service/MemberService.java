@@ -1,7 +1,7 @@
 package com.example.FootballHuB.service;
 
-import com.example.FootballHuB.repository.MemberRepository;
 import com.example.FootballHuB.entity.Member;
+import com.example.FootballHuB.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

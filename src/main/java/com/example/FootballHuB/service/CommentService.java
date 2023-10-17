@@ -1,6 +1,7 @@
 package com.example.FootballHuB.service;
 
 import com.example.FootballHuB.dto.CommentDto;
+import com.example.FootballHuB.dto.CommentHistDto;
 import com.example.FootballHuB.entity.Comment;
 import com.example.FootballHuB.entity.Item;
 import com.example.FootballHuB.entity.Member;
@@ -24,7 +25,7 @@ public class CommentService {
 
     private final MemberRepository memberRepository;
 
-    public CommentDto addComment(CommentDto commentDto, String email) {
+    public CommentHistDto addComment(CommentDto commentDto, String email) {
         Item item = itemRepository.findById(commentDto.getItemId())
                 .orElseThrow(EntityNotFoundException::new);
         Member member = memberRepository.findByEmail(email);
@@ -35,6 +36,7 @@ public class CommentService {
         comment.setItem(item);
 
         commentRepository.save(comment);
-        return CommentDto.of(comment);
+
+        return new CommentHistDto(comment.getId(), comment.getContent(), email, comment.getRegTime());
     }
 }

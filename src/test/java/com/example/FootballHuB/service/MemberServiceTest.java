@@ -2,6 +2,7 @@ package com.example.FootballHuB.service;
 
 import com.example.FootballHuB.dto.MemberFormDto;
 import com.example.FootballHuB.entity.Member;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ class MemberServiceTest {
         assertEquals(member.getName(), savedMember.getName());
         assertEquals(member.getAddress(), savedMember.getAddress());
         assertEquals(member.getPassword(), savedMember.getPassword());
-        assertEquals(member.getRole(), savedMember.getRole());
+        Assertions.assertEquals(member.getRole(), savedMember.getRole());
     }
 
     @Test
