@@ -1,5 +1,6 @@
 package com.example.FootballHuB.config;
 
+import com.example.FootballHuB.controller.Schedule_controller.ScheduleController;
 import com.example.FootballHuB.service.MemberService;
 import com.example.FootballHuB.service.PrincipalOauth2UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -21,6 +24,7 @@ public class SecurityConfig {
 
     @Autowired
     private PrincipalOauth2UserService principalOauth2UserService;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.formLogin()
@@ -42,13 +46,17 @@ public class SecurityConfig {
         http.authorizeRequests()
                 .antMatchers("/chatting/**").permitAll()
                 .mvcMatchers("/css/**", "/js/**", "/imgs/**", "/img/**", "/scss/**", "/fonts/**").permitAll()
-                .mvcMatchers("/", "/members/**", "/item/**", "/images/**", "/shop/**", "/comment/**").permitAll()
+                .mvcMatchers("/", "/members/**", "/item/**", "/images/**", "/shop/**", "/comment/**","/game/**").permitAll()
                 .mvcMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
         ;
 
         http.exceptionHandling()
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint());
+
+
+        http.sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS); // 세션 항상 생성
 
         return http.build();
     }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -24,13 +25,12 @@ public class ScheduleController {
 
     @GetMapping(value = "/")
     public String Schedule(Model model, Authentication authentication) {
-        // 사용자가 로그인한 경우에만 사용자 정보를 가져와 모델에 추가
+        //사용자가 로그인한 경우에만 사용자 정보를 가져와 모델에 추가
         if (authentication != null) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String username = userDetails.getUsername();
             model.addAttribute("username", username);
         }
-
         List<ScheduleDTO> ScheduleDtos = scheduleService.getAllSchedules();
         model.addAttribute("ScheduleDtos", ScheduleDtos);
         System.out.println(ScheduleDtos);
