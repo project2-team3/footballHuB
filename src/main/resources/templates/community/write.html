@@ -1,37 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>게시물작성폼</title>
+    <title>게시판 글쓰기</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
-
-<style>
-    .layout{
-        width : 500px;
-        margin : 0 auto;
-        margin-top: 40px;
-    } /*layout 하위에 있는 input태그 스타일 설정*/
-    .layout input{
-        width: 100%;
-        box-sizing: border-box;
-    }
-    .layout textarea{
-        width: 100%;
-        margin-top: 10px;
-        min-height: 300px;
-    }
-</style>
-
-
 <body>
-<div class="layout">                                <!--form-data추가-->
-    <form action="/api/gall" method="post" enctype="multipart/form-data">
-        <input name="title" type="text">
-        <textarea name="content"></textarea>
-        <!--파일 선택추가-->
-        <input type="file" name="file"> <!--name이름을 controller의 매개변수 이름과 동일하게 설정-->
-        <button type="submit">작성</button>
-    </form>
-</div>
+<h1>게시판 글쓰기</h1>
+
+<form id="postForm">F
+    <div>
+        <label for="title">작성자:</label>
+        <input type="text" id="title" name="title" required>
+    </div>
+    <div>
+        <label for="content">내용:</label>
+        <textarea id="content" name="content" required></textarea>
+    </div>
+    <button type="submit">글 작성</button>
+</form>
+
+<div id="responseMessage"></div>
+
+<script>
+    function submit(){
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+
+        var url ="/api/gall";
+
+        $.ajax({
+            url      : url,
+            type     : "POST",
+            contentType : "application/json",
+            beforeSend : function(xhr){
+                /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                xhr.setRequestHeader(header, token);
+            },
+            dataType : "json",
+            cache   : false,
+            success  : function(result, status){
+                console.log(result);
+            },
+            error : function(jqXHR, status, error){
+
+                if(jqXHR.status == '401'){
+                    alert('로그인 후 이용해주세요');
+                    location.href='/api/gall';
+                } else{
+                    alert(jqXHR.responseText);
+                }
+
+            }
+        });
+    }
+
+
+</script>
 </body>
 </html>
