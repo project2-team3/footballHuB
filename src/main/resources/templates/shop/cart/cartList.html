@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{shop/layouts/layout1}">
+      layout:decorate="~{shop/layouts/layout}">
 
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
@@ -344,7 +344,7 @@
                             </label>
                         </div>
                         <div class="repImgDiv">
-                            <a th:href="@{shop/item/{itemId}">
+                            <a th:href="@{shop/item/{itemId}}">
                                 <img th:src="${cartItem.imgUrl}" class="rounded repImg" th:alt="${cartItem.itemNm}">
                             </a>
                         </div>
