@@ -1284,8 +1284,7 @@ textarea.input {
 \*----------------------------*/
 
 .store-filter {
-  margin-bottom: 15px;
-  margin-top: 15px;
+  margin: 30px;
 }
 
 /*-- Store Sort --*/
@@ -1725,13 +1724,13 @@ textarea.input {
 
 .reviews li {
   position: relative;
-  padding-left: 145px;
+  padding-left: 300px;
   margin-bottom: 30px;
 }
 
 .reviews .review-heading {
   position: absolute;
-  width: 130px;
+  width: 300px;
   left: 0;
   top: 0;
   height: 70px;

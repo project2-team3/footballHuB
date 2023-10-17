@@ -1,6 +1,7 @@
 package com.example.FootballHuB.controller.shop;
 
 import com.example.FootballHuB.dto.CommentDto;
+import com.example.FootballHuB.dto.CommentHistDto;
 import com.example.FootballHuB.entity.Comment;
 import com.example.FootballHuB.repository.CommentRepository;
 import com.example.FootballHuB.service.CommentService;
@@ -28,22 +29,24 @@ public class CommentController {
     public @ResponseBody ResponseEntity comment(@RequestBody @Valid CommentDto commentDto, BindingResult bindingResult, Principal principal) {
 
         String email = principal.getName();
-        CommentDto savedCommentDto;
+        CommentHistDto savedCommentHistDto;
         try {
-            savedCommentDto = commentService.addComment(commentDto, email);
+            savedCommentHistDto = commentService.addComment(commentDto, email);
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<CommentDto>(savedCommentDto, HttpStatus.OK);
+        return new ResponseEntity<CommentHistDto>(savedCommentHistDto, HttpStatus.OK);
     }
 
     @GetMapping(value="/shop/comment/{itemId}")
     public @ResponseBody ResponseEntity commentHist(@PathVariable("itemId") Long itemId) {
-        List<CommentDto> commentDtoList = new ArrayList<>();
-        List<Comment> commentList = commentRepository.findAll();
+        List<CommentHistDto> commentHistDtoList = new ArrayList<>();
+        List<Comment> commentList = commentRepository.findByItemIdOrderByCreatedByDesc(itemId);
         for(Comment comment : commentList) {
-            commentDtoList.add(CommentDto.of(comment));
+            String email = comment.getMember().getEmail();
+            CommentHistDto commentHistDto = new CommentHistDto(comment.getId(), comment.getContent(), email, comment.getRegTime());
+            commentHistDtoList.add(commentHistDto);
         }
-        return new ResponseEntity<List<CommentDto>>(commentDtoList, HttpStatus.OK);
+        return new ResponseEntity<List<CommentHistDto>>(commentHistDtoList, HttpStatus.OK);
     }
 }

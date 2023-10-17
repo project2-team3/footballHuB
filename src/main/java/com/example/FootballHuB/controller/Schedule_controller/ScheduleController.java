@@ -20,7 +20,7 @@ public class ScheduleController {
     }
 
 
-    @GetMapping(value = "/")
+    @GetMapping(value = "/schedules")
     public String Schedule(Model model) {
         List<ScheduleDTO> ScheduleDtos = scheduleService.getAllSchedules();
         model.addAttribute("ScheduleDtos", ScheduleDtos);

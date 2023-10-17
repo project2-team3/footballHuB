@@ -12,7 +12,7 @@ public class MainController {
     private final ItemService itemService;
 
     @GetMapping(value = "/")
-    public String main(){
+    public String mainPage(){
         return "main";
     }
 

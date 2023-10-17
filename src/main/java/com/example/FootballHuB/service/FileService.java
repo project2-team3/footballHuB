@@ -12,12 +12,17 @@ public class FileService {
 
     public String uploadFile(String uploadPath, String originalFileName, byte[] fileData) throws Exception{
         UUID uuid = UUID.randomUUID();
+
         String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
         String savedFileName = uuid.toString() + extension;
         String fileUploadFullUrl = uploadPath + "/" + savedFileName;
+        System.out.println(fileUploadFullUrl);
         FileOutputStream fos = new FileOutputStream(fileUploadFullUrl);
+        System.out.println("분명 여기서 무슨 문제가 발생66");
         fos.write(fileData);
+        System.out.println("분명 여기서 무슨 문제가 발생77");
         fos.close();
+        System.out.println("분명 여기서 무슨 문제가 발생88");
         return savedFileName;
     }
 

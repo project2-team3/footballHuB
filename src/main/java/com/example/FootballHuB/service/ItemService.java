@@ -45,6 +45,7 @@ public class ItemService {
         item.setCategory(category);
         itemRepository.save(item);
 
+        System.out.println("여기까지 온거는 분명해");
         //이미지 등록
         for(int i=0;i<itemImgFileList.size();i++){
             ItemImg itemImg = new ItemImg();

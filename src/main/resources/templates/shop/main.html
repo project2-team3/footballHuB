@@ -81,11 +81,11 @@
                                     <h4 class="product-price">[[${item.price}]]원</h4>
                                     <div>
                                         <fieldset th:class="'rate rate' + ${item.id}">
-                                            <input disabled type="radio" th:class="rating+${item.id}" th:id="5rating+${item.id}" name="rating" value="5"><label th:for="5rating+${item.id}" title="1점"></label>
-                                            <input disabled type="radio" th:class="rating+${item.id}" th:id="4rating+${item.id}" name="rating" value="4"><label th:for="4rating+${item.id}" title="2점"></label>
-                                            <input disabled type="radio" th:class="rating+${item.id}" th:id="3rating+${item.id}" name="rating" value="3"><label th:for="3rating+${item.id}" title="3점"></label>
-                                            <input disabled type="radio" th:class="rating+${item.id}" th:id="2rating+${item.id}" name="rating" value="2"><label th:for="2rating+${item.id}" title="4점"></label>
-                                            <input disabled type="radio" th:class="rating+${item.id}" th:id="1rating+${item.id}" name="rating" value="1"><label th:for="1rating+${item.id}" title="5점"></label>
+                                            <input disabled="true" type="radio" th:class="rating+${item.id}" th:id="5rating+${item.id}" name="rating" value="5"><label th:for="5rating+${item.id}" title="1점"></label>
+                                            <input disabled="true" type="radio" th:class="rating+${item.id}" th:id="4rating+${item.id}" name="rating" value="4"><label th:for="4rating+${item.id}" title="2점"></label>
+                                            <input disabled="true" type="radio" th:class="rating+${item.id}" th:id="3rating+${item.id}" name="rating" value="3"><label th:for="3rating+${item.id}" title="3점"></label>
+                                            <input disabled="true" type="radio" th:class="rating+${item.id}" th:id="2rating+${item.id}" name="rating" value="2"><label th:for="2rating+${item.id}" title="4점"></label>
+                                            <input disabled="true" type="radio" th:class="rating+${item.id}" th:id="1rating+${item.id}" name="rating" value="1"><label th:for="1rating+${item.id}" title="5점"></label>
                                         </fieldset>
                                     </div>
                                 </div>
@@ -100,21 +100,13 @@
             </div>
         </div>
     </div>
-    <div style="display: flex; justify-content: center;" th:with="start=${(items.number/maxPage)*maxPage + 1}, end=(${(items.totalPages == 0) ? 1 : (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) : items.totalPages)})" >
-        <ul class="pagination justify-content-center">
-            <li class="page-item" th:classappend="${items.number eq 0}?'disabled':''">
-                <a th:href="@{'/' + '?searchQuery=' + ${itemSearchDto.searchQuery} + '&page=' + ${items.number-1}}" aria-label='Previous' class="page-link">
-                    <span aria-hidden='true'>Previous</span>
-                </a>
+    <div class="store-filter clearfix" th:with="start=${(items.number/maxPage)*maxPage + 1}, end=(${(items.totalPages == 0) ? 1 : (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) : items.totalPages)})">
+        <ul class="store-pagination">
+            <li class="page-item" th:classappend="${items.number eq 0}?'disabled':''"><a th:href="@{'/shop' + '?searchQuery=' + ${itemSearchDto.searchQuery} + '&page=' + ${items.number-1}}"><i class="fa fa-angle-left"></i></a></li>
+            <li th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${items.number eq page-1}?'active':''">
+                <a th:href="@{'/shop' +'?searchQuery=' + ${itemSearchDto.searchQuery} + '&page=' + ${page-1}}" th:inline="text" class="page-link">[[${page}]]</a>
             </li>
-            <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${items.number eq page-1}?'active':''">
-                <a th:href="@{'/' +'?searchQuery=' + ${itemSearchDto.searchQuery} + '&page=' + ${page-1}}" th:inline="text" class="page-link">[[${page}]]</a>
-            </li>
-            <li class="page-item" th:classappend="${items.number+1 ge items.totalPages}?'disabled':''">
-                <a th:href="@{'/' +'?searchQuery=' + ${itemSearchDto.searchQuery} + '&page=' + ${items.number+1}}" aria-label='Next' class="page-link">
-                    <span aria-hidden='true'>Next</span>
-                </a>
-            </li>
+            <li th:classappend="${items.number+1 ge items.totalPages}?'disabled':''"><a th:href="@{'/shop' +'?searchQuery=' + ${itemSearchDto.searchQuery} + '&page=' + ${items.number+1}}"><i class="fa fa-angle-right"></i></a></li>
         </ul>
     </div>
 </div>

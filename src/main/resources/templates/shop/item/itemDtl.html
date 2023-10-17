@@ -6,48 +6,14 @@
 <head>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-</head>function getCommentList() {
-var token = $("meta[name='_csrf']").attr("content");
-var header = $("meta[name='_csrf_header']").attr("content");
-
-var url = "/comment/" + $("#itemId").val();
-
-$.ajax({
-url      : url,
-type     : "GET",
-contentType : "application/json",
-beforeSend : function(xhr){
-/* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
-xhr.setRequestHeader(header, token);
-},
-dataType : "json",
-cache   : false,
-success  : function(result, status){
-console.log(result);
-},
-error : function(jqXHR, status, error){
-
-if(jqXHR.status == '401'){
-alert('로그인 후 이용해주세요');
-location.href='/members/login';
-} else{
-alert(jqXHR.responseText);
-}
-
-}
-});
-}
+</head>
 
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
     <script th:inline="javascript">
-
         $(document).ready(function(){
-
             calculateToalPrice();
-
             getCommentList();
-
             $("#commentForm").on("click",function(e) {
                 e.preventDefault();
             });
@@ -60,9 +26,7 @@ alert(jqXHR.responseText);
         function getCommentList() {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
-
-            var url = "/comment/" + $("#itemId").val();
-
+            var url = "/shop/comment/" + $("#itemId").val();
             $.ajax({
                 url      : url,
                 type     : "GET",
@@ -74,7 +38,9 @@ alert(jqXHR.responseText);
                 dataType : "json",
                 cache   : false,
                 success  : function(result, status){
-                    console.log(result);
+                    for(let i = 0; i < result.length; i++) {
+                        addCommentEle(result[i]);
+                    }
                 },
                 error : function(jqXHR, status, error){
 
@@ -135,12 +101,11 @@ alert(jqXHR.responseText);
                 }
             });
         }
-
         function addComment() {
         var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
 
-            var url = "/comment";
+            var url = "/shop/comment";
             var paramData = {
                 itemId : $("#itemId").val(),
                 content : $("#comment").val()
@@ -161,6 +126,7 @@ alert(jqXHR.responseText);
                 cache   : false,
                 success  : function(result, status){
                     console.log(result);
+                    addCommentEle(result);
                 },
                 error : function(jqXHR, status, error){
 
@@ -174,7 +140,20 @@ alert(jqXHR.responseText);
                 }
             });
         }
-
+        function addCommentEle(obj) {
+            const reviewList = document.querySelectorAll('.reviews');
+            const newReview = document.createElement('li');
+            newReview.innerHTML = `
+                <div class="review-heading">
+                    <h5 class="name">${obj.email}</h5>
+                    <p class="date">${obj.regTime}</p>
+                </div>
+                <div>
+                   <p>${obj.content}</p>
+                </div>
+            `;
+            reviewList[0].appendChild(newReview);
+        }
         function addCart(){
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
@@ -247,128 +226,30 @@ alert(jqXHR.responseText);
 </th:block>
 
 <div layout:fragment="content">
-
-<!--    <input type="hidden" id="itemId" th:value="${item.id}">-->
-
-<!--    <div class="d-flex">-->
-<!--        <div class="repImgDiv">-->
-<!--            <img th:src="${item.itemImgDtoList[0].imgUrl}" class = "rounded repImg" th:alt="${item.itemNm}">-->
-<!--        </div>-->
-<!--        <div class="wd50">-->
-<!--            <span th:if="${item.itemSellStatus == T(com.shop.constant.ItemSellStatus).SELL}" class="badge badge-primary mgb-15">-->
-<!--                판매중-->
-<!--            </span>-->
-<!--            <span th:unless="${item.itemSellStatus == T(com.shop.constant.ItemSellStatus).SELL}" class="badge btn-danger mgb-15" >-->
-<!--                품절-->
-<!--            </span>-->
-<!--            <div class="h4" th:text="${item.itemNm}"></div>-->
-<!--            <hr class="my-4">-->
-
-<!--            <div class="text-right">-->
-<!--                <div class="h4 text-danger text-left">-->
-<!--                    <input type="hidden" th:value="${item.price}" id="price" name="price">-->
-<!--                    <span th:text="${item.price}"></span>원-->
-<!--                </div>-->
-<!--                <div class="input-group w-50">-->
-<!--                    <div class="input-group-prepend">-->
-<!--                        <span class="input-group-text">수량</span>-->
-<!--                    </div>-->
-<!--                    <input type="number" name="count" id="count" class="form-control" value="1" min="1">-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <hr class="my-4">-->
-
-<!--            <div class="text-right mgt-50">-->
-<!--                <h5>결제 금액</h5>-->
-<!--                <h3 name="totalPrice" id="totalPrice" class="font-weight-bold"></h3>-->
-<!--            </div>-->
-<!--            <div th:if="${item.itemSellStatus == T(com.shop.constant.ItemSellStatus).SELL}" class="text-right">-->
-<!--                <button type="button" class="btn btn-light border border-primary btn-lg" onclick="addCart()">장바구니 담기</button>-->
-<!--                <button type="button" class="btn btn-primary btn-lg" onclick="order()">주문하기</button>-->
-<!--            </div>-->
-<!--            <div th:unless="${item.itemSellStatus == T(com.shop.constant.ItemSellStatus).SELL}" class="text-right">-->
-<!--                <button type="button" class="btn btn-danger btn-lg">품절</button>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-
-<!--    <div class="jumbotron jumbotron-fluid mgt-30">-->
-<!--        <div class="container">-->
-<!--            <h4 class="display-5">상품 상세 설명</h4>-->
-<!--            <hr class="my-4">-->
-<!--            <p class="lead" th:text="${item.itemDetail}"></p>-->
-<!--        </div>-->
-<!--        <div id="response"></div>-->
-<!--        <form id="commentForm">-->
-<!--            <textarea cols="50" rows="10" id="comment"></textarea>-->
-<!--            <input type="submit" value="Submit" onclick="addComment()">-->
-<!--        </form>-->
-<!--        <ul th:if="${commentList}">-->
-<!--            <li th:each="comment : ${commentList}">[[${comment}]]</li>-->
-<!--        </ul>-->
-<!--        <form>-->
-
-<!--        </form>-->
-<!--    </div>-->
-
-<!--    <div th:each="itemImg : ${item.itemImgDtoList}" class="text-center">-->
-<!--        <img th:if="${not #strings.isEmpty(itemImg.imgUrl)}" th:src="${itemImg.imgUrl}" class="rounded mgb-15" width="800">-->
-<!--    </div>-->
+    <input type="hidden" id="itemId" th:value="${item.id}">
 
     <!-- SECTION -->
     <div class="section">
-        <!-- container -->
         <div class="container">
-            <!-- row -->
             <div class="row">
-                <!-- Product main img -->
                 <div class="col-md-5 col-md-push-2">
                     <div id="product-main-img">
-                        <div class="product-preview">
-                            <img th:src="@{/img/product01.png}" alt="">
-                        </div>
-
-                        <div class="product-preview">
-                            <img th:src="@{/img/product03.png}" alt="">
-                        </div>
-
-                        <div class="product-preview">
-                            <img th:src="@{/img/product06.png}" alt="">
-                        </div>
-
-                        <div class="product-preview">
-                            <img th:src="@{/img/product08.png}" alt="">
+                        <div class="product-preview" th:each="itemImgDto : ${item.itemImgDtoList}">
+                            <img th:src="${itemImgDto.imgUrl}" class = "rounded repImg" alt="item detail image">
                         </div>
                     </div>
                 </div>
-                <!-- /Product main img -->
-
-                <!-- Product thumb imgs -->
                 <div class="col-md-2  col-md-pull-5">
                     <div id="product-imgs">
-                        <div class="product-preview">
-                            <img th:src="@{/img/product01.png}" alt="">
-                        </div>
-
-                        <div class="product-preview">
-                            <img src="./img/product03.png" alt="">
-                        </div>
-
-                        <div class="product-preview">
-                            <img th:src="@{/img/product06.png}" alt="">
-                        </div>
-
-                        <div class="product-preview">
-                            <img th:src="@{/img/product08.png}" alt="">
+                        <div class="product-preview" th:each="itemImg : ${item.itemImgDtoList}">
+                            <img th:if="${not #strings.isEmpty(itemImg.imgUrl)}" th:src="${itemImg.imgUrl}">
                         </div>
                     </div>
                 </div>
-                <!-- /Product thumb imgs -->
-
-                <!-- Product details -->
+                <p>principal : <sec:authentication property="principal"/></p><hr/>
                 <div class="col-md-5">
                     <div class="product-details">
-                        <h2 class="product-name">product name goes here</h2>
+                        <h2 class="product-name" th:text="${item.itemNm}"></h2>
                         <div>
                             <div class="product-rating">
                                 <i class="fa fa-star"></i>
@@ -379,27 +260,44 @@ alert(jqXHR.responseText);
                             </div>
                         </div>
                         <div>
-                            <h3 class="product-price">$980.00</h3>
-                            <span class="product-available">In Stock</span><del class="product-old-price">$990.00</del>
+                            <div class="product-price">
+                                <input type="hidden" th:value="${item.price}" id="price" name="price">
+                                <span th:text="${item.price}"></span>원
+                            </div>
+                            <span th:if="${item.itemSellStatus == T(com.example.FootballHuB.constant.ItemSellStatus).SELL}" style="background-color: #FDBE33;" class="badge badge-primary mgb-15">
+                                판매중
+                            </span>
+                            <span th:unless="${item.itemSellStatus == T(com.example.FootballHuB.constant.ItemSellStatus).SELL}" class="badge btn-danger mgb-15" >
+                                품절
+                            </span>
                         </div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                        <p th:text="${item.itemDetail}"></p>
 
                         <div class="add-to-cart">
                             <div class="qty-label">
-                                Qty
-                                <div class="input-number">
-                                    <input type="number">
+                                <span class="input-group-text">수량</span>
+                                <div class="input-number input-group-prepend">
+                                    <input type="number" name="count" id="count" class="form-control" value="1" min="1">
                                     <span class="qty-up">+</span>
                                     <span class="qty-down">-</span>
                                 </div>
                             </div>
-                            <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
                         </div>
+                        <div class="d-flex">
+                            <div class="text-right mgt-50">
+                                <h5>결제 금액</h5>
+                                <h3 name="totalPrice" id="totalPrice" class="font-weight-bold"></h3>
+                            </div>
+                            <div th:if="${item.itemSellStatus == T(com.example.FootballHuB.constant.ItemSellStatus).SELL}" class="text-right">
+                                <button style="background-color: #FDBE33;" type="button" class="btn btn-primary btn-lg" onclick="addCart()">장바구니</button>
+                                <button type="button" class="btn btn-primary btn-lg" onclick="order()">주문하기</button>
+                            </div>
+                            <div th:unless="${item.itemSellStatus == T(com.example.FootballHuB.constant.ItemSellStatus).SELL}" class="text-right">
+                                <button type="button" class="btn btn-danger btn-lg">품절</button>
+                            </div>
                     </div>
                 </div>
-                <!-- /Product details -->
-
-                <!-- Product tab -->
+                </div>
                 <div class="col-md-12">
                     <div id="product-tab">
                         <!-- product tab nav -->
@@ -411,54 +309,29 @@ alert(jqXHR.responseText);
                                 <div class="row">
                                     <div id="reviews">
                                         <ul class="reviews">
-                                            <li>
+                                            <li th:each="commentHistDto : ${commentHistDtoList}">
                                                 <div class="review-heading">
-                                                    <h5 class="name">John</h5>
-                                                    <p class="date">27 DEC 2018, 8:0 PM</p>
+                                                    <h5 class="name">[[${commentHistDto.email}]]</h5>
+                                                    <p class="date">[[${commentHistDto.regTime}</p>
                                                 </div>
                                                 <div class="review-body">
-                                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="review-heading">
-                                                    <h5 class="name">John</h5>
-                                                    <p class="date">27 DEC 2018, 8:0 PM</p>
-                                                    <div class="review-rating">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-o empty"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="review-body">
-                                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="review-heading">
-                                                    <h5 class="name">John</h5>
-                                                    <p class="date">27 DEC 2018, 8:0 PM</p>
-                                                    <div class="review-rating">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-o empty"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="review-body">
-                                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
+                                                    <p>[[${commentHistDto.content}]]</p>
                                                 </div>
                                             </li>
                                         </ul>
-                                        <ul class="reviews-pagination">
-                                            <li class="active">1</li>
-                                            <li><a href="#">2</a></li>
-                                            <li><a href="#">3</a></li>
-                                            <li><a href="#">4</a></li>
-                                            <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
+                                        <ul class="reviews">
+                                            <li>
+                                                <div class="review-heading">
+                                                    <h5 class="name">John</h5>
+                                                    <p class="date">27 DEC 2018, 8:0 PM</p>
+                                                </div>
+                                                <div class="review-body">
+                                                    <form id="commentForm">
+                                                        <textarea cols="50" rows="3" id="comment"></textarea>
+                                                        <input type="submit" value="Submit" onclick="addComment()">
+                                                    </form>
+                                                </div>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
