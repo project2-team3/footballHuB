@@ -13,7 +13,7 @@ import java.util.Map;
 
 @Getter
 @ToString
-public class PrincipalDetails implements OAuth2User {
+public class PrincipalDetails implements OAuth2User,UserDetails {
 
     private Member member;
     private Map<String, Object> attributes;
@@ -52,4 +52,35 @@ public class PrincipalDetails implements OAuth2User {
     public String getName() {
         return attributes.get("sub").toString();
     }
+
+    @Override
+    public String getUsername() {
+        return member.getName(); // 사용자의 이름을 반환합니다.
+    }
+    @Override
+    public String getPassword() {
+        return member.getPassword();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true; // 사용자 계정이 만료되지 않았음을 반환합니다. 만약 사용자 계정 만료를 처리하려면 조건을 적용하세요.
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true; // 사용자 계정이 잠겨 있지 않음을 반환합니다. 만약 사용자 계정 잠금 여부를 처리하려면 조건을 적용하세요.
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true; // 사용자 자격 증명이 만료되지 않았음을 반환합니다. 만약 사용자 자격 증명의 만료 여부를 처리하려면 조건을 적용하세요.
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true; // 사용자 계정이 활성화되었음을 반환합니다. 만약 사용자 계정의 활성화 여부를 처리하려면 조건을 적용하세요.
+    }
+
+
 }
