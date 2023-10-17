@@ -2,12 +2,14 @@ package com.example.FootballHuB.entity;
 
 import com.example.FootballHuB.constant.Role;
 import com.example.FootballHuB.dto.MemberFormDto;
+import com.example.FootballHuB.entity.gameEntity.Game;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name="member")
@@ -35,6 +37,9 @@ public class Member extends BaseEntity {
     private String provider;
 
     private String providerId;
+
+    @OneToMany(mappedBy = "member")
+    private List<Game> games;
 
 //    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
 //    private List<ItemComment> itemComments = new ArrayList<>();

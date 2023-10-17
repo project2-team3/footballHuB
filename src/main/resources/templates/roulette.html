@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Winning Wheel</title>
+    <script type="text/javascript" th:src="@{/js/Winwheel.js}"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+
+    <style>
+        body {
+            font-family: arial;
+        }
+
+        td.the_wheel {
+            background-image: url('/images/roulette/wheel_back.png');
+            background-position: center;
+            background-repeat: none;
+            background-size:100% 100%;
+        }
+
+        /* Do some css reset on selected elements */
+        h1, p {
+            margin: 0;
+        }
+
+        div.power_controls {
+            margin-right: 70px;
+        }
+
+        div.html5_logo {
+            margin-left: 70px;
+        }
+
+        /* Styles for the power selection controls */
+        table.power {
+            background-color: #cccccc;
+            cursor: pointer;
+            border: 1px solid #333333;
+        }
+
+        table.power th {
+            background-color: white;
+            cursor: default;
+        }
+
+        td.pw1 {
+            background-color: #6fe8f0;
+        }
+
+        td.pw2 {
+            background-color: #86ef6f;
+        }
+
+        td.pw3 {
+            background-color: #ef6f6f;
+        }
+
+        /* Style applied to the spin button once a power has been selected */
+        .clickable {
+            cursor: pointer;
+        }
+
+        /* Other misc styles */
+        .margin_bottom {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<div align="center">
+    <h1>룰렛 게임 !!</h1>
+    <br />
+    <br />
+    <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+            <td>
+                <div class="power_controls">
+                    <br />
+                    <br />
+                    <table class="power" cellpadding="10" cellspacing="0">
+                        <tr>
+                            <th align="center">Power</th>
+                        </tr>
+                        <tr>
+                            <td width="78" align="center" id="pw3" onClick="powerSelected(3);">High</td>
+                        </tr>
+                        <tr>
+                            <td align="center" id="pw2" onClick="powerSelected(2);">Med</td>
+                        </tr>
+                        <tr>
+                            <td align="center" id="pw1" onClick="powerSelected(1);">Low</td>
+                        </tr>
+                    </table>
+                    <br />
+                    <img id="spin_button" th:src="@{/images/roulette/spin_off.png}" alt="Spin" onClick="startSpin();" />
+                    <br /><br />
+                    &nbsp;&nbsp;<a href="#" onClick="resetWheel(); return false;">Play Again</a><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(reset)
+                </div>
+            </td>
+            <td width="438" height="582" class="the_wheel" align="center" valign="center">
+                <canvas id="canvas" width="434" height="434">
+                    <p style="color: white" align="center">Sorry, your browser doesn't support canvas. Please try another.</p>
+                </canvas>
+            </td>
+        </tr>
+    </table>
+    <div th:if="${#lists.isEmpty(giftsList)}">
+        <p>선물이 없습니다</p>
+    </div>
+</div>
+
+<script th:inline="javascript">
+
+    var giftsData = [];
+    /*[# th:each="gift : ${giftsList}"]*/
+    var imagePath = /*[[@{'/images/roulette/' + ${gift.giftImage} + '?gift=GameGift(giftId%3D' + ${gift.giftId} + ',%20giftName%3D' + ${gift.giftName} + ',%20giftContent%3D' + ${gift.giftContent} + ',%20giftImage%3D' + ${gift.giftImage} + ')'}]]*/ '';
+    var giftContent = /*[[${gift.giftContent}]]*/ '';
+    giftsData.push({
+        'image': imagePath,
+        'text': giftContent
+        });
+        /*[/]*/
+
+        var theWheel = new Winwheel({
+                 'numSegments'  : giftsData.length,
+                 'outerRadius'  : 215 ,
+                 'textFontSize' : 28,
+                 'segments'     : giftsData,
+                 'animation' :           // Specify the animation to use.
+                 {
+                     'type'     : 'spinToStop',
+                     'duration' : 5,     // Duration in seconds.
+                     'spins'    : 8,     // Number of complete spins.
+                     'callbackFinished' : alertPrize
+                 }
+             });
+
+             // Vars used by the code in this page to do power controls.
+             let wheelPower    = 0;
+             let wheelSpinning = false;
+
+             // -------------------------------------------------------
+             // Function to handle the onClick on the power buttons.
+             // -------------------------------------------------------
+             function powerSelected(powerLevel)
+             {
+                 // Ensure that power can't be changed while wheel is spinning.
+                 if (wheelSpinning == false) {
+                     // Reset all to grey incase this is not the first time the user has selected the power.
+                     document.getElementById('pw1').className = "";
+                     document.getElementById('pw2').className = "";
+                     document.getElementById('pw3').className = "";
+
+                     // Now light up all cells below-and-including the one selected by changing the class.
+                     if (powerLevel >= 1) {
+                         document.getElementById('pw1').className = "pw1";
+                     }
+
+                     if (powerLevel >= 2) {
+                         document.getElementById('pw2').className = "pw2";
+                     }
+
+                     if (powerLevel >= 3) {
+                         document.getElementById('pw3').className = "pw3";
+                     }
+
+                     // Set wheelPower var used when spin button is clicked.
+                     wheelPower = powerLevel;
+
+                     // Light up the spin button by changing it's source image and adding a clickable class to it.
+                     document.getElementById('spin_button').src = /*[[@{/images/roulette/spin_on.png}]]*/ '';
+                     document.getElementById('spin_button').className = "clickable";
+                 }
+             }
+
+             // -------------------------------------------------------
+             // Click handler for spin button.
+             // -------------------------------------------------------
+
+             /*<![CDATA[*/
+                var loggedInUser = /*[[${session.username}]]*/ null;
+             /*]]>*/
+             console.log(loggedInUser);
+             function startSpin(){
+                if (loggedInUser !== null ) {
+                    // Ensure that spinning can't be clicked again while already running.
+                    if (wheelSpinning == false ) {
+                     // Based on the power level selected adjust the number of spins for the wheel, the more times is has
+                     // to rotate with the duration of the animation the quicker the wheel spins.
+                     if (wheelPower == 1) {
+                         theWheel.animation.spins = 3;
+                     } else if (wheelPower == 2) {
+                         theWheel.animation.spins = 8;
+                     } else if (wheelPower == 3) {
+                         theWheel.animation.spins = 15;
+                     }
+
+                     // Disable the spin button so can't click again while wheel is spinning.
+                     document.getElementById('spin_button').src = /*[[@{/images/roulette/spin_on.png}]]*/ '';
+                     document.getElementById('spin_button').className = "";
+
+                     // Begin the spin animation by calling startAnimation on the wheel object.
+                     theWheel.startAnimation();
+
+                     // Set to true so that power can't be changed and spin button re-enabled during
+                     // the current animation. The user will have to reset before spinning again.
+                     wheelSpinning = true;
+                    }}
+                else {
+                    alert ("로그인해주세요 !!");
+                    }
+                }
+
+             // -------------------------------------------------------
+             // Function for reset button.
+             // -------------------------------------------------------
+             function resetWheel()
+             {
+                 theWheel.stopAnimation(false);  // Stop the animation, false as param so does not call callback function.
+                 theWheel.rotationAngle = 0;     // Re-set the wheel angle to 0 degrees.
+                 theWheel.draw();                // Call draw to render changes to the wheel.
+
+                 document.getElementById('pw1').className = "";  // Remove all colours from the power level indicators.
+                 document.getElementById('pw2').className = "";
+                 document.getElementById('pw3').className = "";
+
+                 wheelSpinning = false;          // Reset to false to power buttons and spin can be clicked again.
+             }
+
+             // -------------------------------------------------------
+             // Called when the spin animation has finished by the callback feature of the wheel because I specified callback in the parameters
+             // note the indicated segment is passed in as a parmeter as 99% of the time you will want to know this to inform the user of their prize.
+             // -------------------------------------------------------
+             function alertPrize(indicatedSegment)
+             {
+                 // Do basic alert of the segment text. You would probably want to do something more interesting with this information.
+                 alert(indicatedSegment.text);
+             }
+
+</script>
+</body>
+</html>
