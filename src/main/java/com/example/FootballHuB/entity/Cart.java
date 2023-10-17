@@ -12,8 +12,9 @@ import javax.persistence.*;
 public class Cart extends BaseEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cart_seq_generator")
+    @SequenceGenerator(name = "cart_seq_generator", sequenceName = "HIBERNATE_SEQUENCE", allocationSize = 1)
     @Column(name = "cart_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
