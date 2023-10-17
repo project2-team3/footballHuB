@@ -16,13 +16,18 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
     @Transactional(readOnly = true)
-    public List<CategoryDto> getAllCategory(){
-        List<Category> categoryList = categoryRepository.findAll();
-        List<CategoryDto> categoryDtoList = new ArrayList<>();
-        for (Category category : categoryList) {
-            CategoryDto categoryDto = CategoryDto.of(category);
-            categoryDtoList.add(categoryDto);
-        }
-        return categoryDtoList;
+    public List<CategoryDto> getAllCategory() {
+        var categoryList = categoryRepository.findAll();
+//        var categoryDtoList = new ArrayList<CategoryDto>();
+
+//        for (Category category : categoryList) {
+//            CategoryDto categoryDto = CategoryDto.of(category);
+//            categoryDtoList.add(categoryDto);
+//        }
+//        return categoryDtoList;
+
+        return categoryList.stream()
+                .map(CategoryDto::of)
+                .toList();
     }
 }

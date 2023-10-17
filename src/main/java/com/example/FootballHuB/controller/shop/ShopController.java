@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +28,7 @@ public class ShopController {
     @GetMapping
     public String shopMain(ItemSearchDto itemSearchDto, Optional<Integer> page, Model model){
 
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
+        Pageable pageable = PageRequest.of(page.orElse(0), 6);
         Page<MainItemDto> items = itemService.getMainItemPage(itemSearchDto, pageable);
 
         List<CategoryDto> categoryDtoList =  categoryService.getAllCategory();

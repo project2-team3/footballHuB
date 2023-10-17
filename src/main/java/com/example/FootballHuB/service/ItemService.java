@@ -41,12 +41,13 @@ public class ItemService {
 
         //상품 등록
         Item item = itemFormDto.createItem();
-        Category category = categoryRepository.findByName(itemFormDto.getCategoryName());
-        item.setCategory(category);
+//        Category category = categoryRepository.findByName(itemFormDto.getCategoryName());
+//        var itemList = itemRepository.findByCategory(item.getCategory());
+
         itemRepository.save(item);
 
         //이미지 등록
-        for(int i=0;i<itemImgFileList.size();i++){
+        for (int i = 0; i < itemImgFileList.size(); i++) {
             ItemImg itemImg = new ItemImg();
             itemImg.setItem(item);
 
@@ -62,7 +63,7 @@ public class ItemService {
     }
 
     @Transactional(readOnly = true)
-    public ItemFormDto getItemDtl(Long itemId){
+    public ItemFormDto getItemDtl(Long itemId) {
         List<ItemImg> itemImgList = itemImgRepository.findByItemIdOrderByIdAsc(itemId);
         List<ItemImgDto> itemImgDtoList = new ArrayList<>();
         for (ItemImg itemImg : itemImgList) {

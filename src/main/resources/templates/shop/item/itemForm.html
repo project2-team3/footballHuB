@@ -61,8 +61,8 @@
                 <form role="form" method="post" enctype="multipart/form-data" th:object="${itemFormDto}">
                     <input type="hidden" th:field="*{id}">
                     <div class="form-group">
-                        <select th:field="*{categoryName}" class="custom-select">
-                            <option th:each="category : ${categoryDtoList}" th:value="${category.name}" th:text="${category.name}"></option>
+                        <select th:field="*{category.id}" class="custom-select">
+                            <option th:each="category : ${categoryDtoList}" th:value="${category.id}" th:text="${category.name}"></option>
                         </select>
                     </div>
                     <div class="form-group">

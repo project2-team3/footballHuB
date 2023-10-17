@@ -4,21 +4,19 @@ package com.example.FootballHuB.controller.shop;
 import com.example.FootballHuB.dto.CategoryDto;
 import com.example.FootballHuB.service.CategoryService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.ui.Model;
 import com.example.FootballHuB.dto.ItemFormDto;
 
 import com.example.FootballHuB.service.ItemService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
+
 import javax.validation.Valid;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
-import org.springframework.web.bind.annotation.PathVariable;
 import javax.persistence.EntityNotFoundException;
 
 import com.example.FootballHuB.dto.ItemSearchDto;
@@ -30,12 +28,13 @@ import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/shop")
 public class ItemController {
 
     private final ItemService itemService;
     private final CategoryService categoryService;
 
-    @GetMapping(value = "/shop/admin/item/new")
+    @GetMapping(value = "/admin/item/new")
     public String itemForm(Model model){
 
         List<CategoryDto> categoryDtoList = categoryService.getAllCategory();
@@ -45,14 +44,14 @@ public class ItemController {
         return "shop/item/itemForm";
     }
 
-    @PostMapping(value = "/shop/admin/item/new")
+    @PostMapping(value = "/admin/item/new")
     public String itemNew(@Valid ItemFormDto itemFormDto, BindingResult bindingResult,
                           Model model, @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList){
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "shop/item/itemForm";
         }
 
-        if(itemImgFileList.get(0).isEmpty() && itemFormDto.getId() == null){
+        if (itemImgFileList.get(0).isEmpty() && itemFormDto.getId() == null){
             model.addAttribute("errorMessage", "첫번째 상품 이미지는 필수 입력 값 입니다.");
             return "shop/item/itemForm";
         }
@@ -67,7 +66,7 @@ public class ItemController {
         return "redirect:/shop";
     }
 
-    @GetMapping(value = "/shop/admin/item/{itemId}")
+    @GetMapping(value = "/admin/item/{itemId}")
     public String itemDtl(@PathVariable("itemId") Long itemId, Model model){
 
         try {
@@ -82,7 +81,7 @@ public class ItemController {
         return "shop/item/itemForm";
     }
 
-    @PostMapping(value = "/shop/admin/item/{itemId}")
+    @PostMapping(value = "/admin/item/{itemId}")
     public String itemUpdate(@Valid ItemFormDto itemFormDto, BindingResult bindingResult,
                              @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList, Model model){
         if(bindingResult.hasErrors()){
@@ -104,7 +103,7 @@ public class ItemController {
         return "redirect:/shop";
     }
 
-    @GetMapping(value = {"/shop/admin/items", "/shop/admin/items/{page}"})
+    @GetMapping(value = {"/admin/items", "/admin/items/{page}"})
     public String itemManage(ItemSearchDto itemSearchDto, @PathVariable("page") Optional<Integer> page, Model model){
 
         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 3);
@@ -117,7 +116,7 @@ public class ItemController {
         return "shop/item/itemMng";
     }
 
-    @GetMapping(value = "/shop/item/{itemId}")
+    @GetMapping(value = "/item/{itemId}")
     public String itemDtl(Model model, @PathVariable("itemId") Long itemId){
         ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
         model.addAttribute("item", itemFormDto);

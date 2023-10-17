@@ -1,11 +1,13 @@
 package com.example.FootballHuB.dto;
 
 import com.example.FootballHuB.constant.ItemSellStatus;
+import com.example.FootballHuB.entity.Category;
 import com.example.FootballHuB.entity.Item;
 import lombok.Getter;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
 
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -29,7 +31,8 @@ public class ItemFormDto {
     private Integer stockNumber;
 
     @NotNull(message = "카테고리 설정은 필수 입력 값입니다")
-    private String CategoryName;
+    @ManyToOne
+    private Category category;
 
     private ItemSellStatus itemSellStatus;
 
@@ -39,12 +42,12 @@ public class ItemFormDto {
 
     private static ModelMapper modelMapper = new ModelMapper();
 
-    public Item createItem(){
+    public Item createItem() {
         return modelMapper.map(this, Item.class);
     }
 
     public static ItemFormDto of(Item item){
-        return modelMapper.map(item,ItemFormDto.class);
+        return modelMapper.map(item, ItemFormDto.class);
     }
 
 }
