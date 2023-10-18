@@ -4,6 +4,7 @@ import com.example.FootballHuB.entity.Member;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.Map;
 
 @Getter
 @ToString
-public class PrincipalDetails implements OAuth2User,UserDetails {
+public class PrincipalDetails implements OAuth2User, UserDetails {
 
     private Member member;
     private Map<String, Object> attributes;
