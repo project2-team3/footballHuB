@@ -41,7 +41,8 @@ public class SecurityConfig {
                 .userService(principalOauth2UserService);
 
         http.authorizeRequests()
-                .antMatchers("/chatting/**").permitAll()
+                // 업데이트 엔드포인트에 대한 권한 설정
+                .antMatchers("/chatting/**","/update-spin-count").permitAll()
                 .mvcMatchers("/css/**", "/js/**", "/imgs/**", "/img/**", "/scss/**", "/fonts/**").permitAll()
                 .mvcMatchers("/", "/members/**", "/shop/item/**", "/shop/item", "/images/**", "/shop", "/shop/comment/**", "/comment/**", "/static/**").permitAll()
                 .mvcMatchers("/admin/**").hasRole("ADMIN")

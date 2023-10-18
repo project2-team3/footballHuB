@@ -2,35 +2,51 @@ package com.example.FootballHuB.controller.gameController;
 
 
 
+import com.example.FootballHuB.entity.Member;
+import com.example.FootballHuB.entity.gameEntity.Game;
 import com.example.FootballHuB.entity.gameEntity.GameGift;
+import com.example.FootballHuB.repository.MemberRepository;
+import com.example.FootballHuB.service.MemberService;
 import com.example.FootballHuB.service.gameService.GameGiftService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class GameController {
 
     private final GameGiftService gameGiftService;
+    private final MemberService memberService;
+
 
     @Autowired
-    public GameController(GameGiftService gameGiftService) {
+    public GameController(GameGiftService gameGiftService, MemberService memberService) {
         this.gameGiftService = gameGiftService;
+        this.memberService = memberService;
     }
 
+
     @GetMapping("/game")
-    public String showRoulette(HttpServletRequest request, Authentication authentication,Model model) {
+    public String showRoulette(HttpServletRequest request, Authentication authentication, Model model) {
+
         if (authentication != null) {
             String username = authentication.getName();
             request.getSession().setAttribute("username", username);
             System.out.println("Logged in username: " + username);
+
+            Integer spinCount = memberService.getSpinCountByEmail(username);
+            model.addAttribute("spinCount", spinCount);
         }
+
         List<GameGift> giftsList = gameGiftService.getAllGameGifts();
         model.addAttribute("giftsList", giftsList);
 
@@ -39,5 +55,14 @@ public class GameController {
 
         return "roulette.html";
     }
-}
 
+    @PostMapping("/update-spin-count")
+    public ResponseEntity<String> updateSpinCount(@RequestBody Map<String, Object> requestData) {
+        String email = (String) requestData.get("email");
+        int updatedSpinCount = Integer.parseInt(requestData.get("spinCount").toString());
+        memberService.updateSpinCountByEmail(email, updatedSpinCount);
+        System.out.println(email + updatedSpinCount);
+        return ResponseEntity.ok("스핀 카운트가 업데이트되었습니다.");
+    }
+
+}
