@@ -79,11 +79,7 @@ public class CartService {
                 .orElseThrow(EntityNotFoundException::new);
         Member savedMember = cartItem.getCart().getMember();
 
-        if(!StringUtils.equals(curMember.getEmail(), savedMember.getEmail())){
-            return false;
-        }
-
-        return true;
+        return StringUtils.equals(curMember.getEmail(), savedMember.getEmail());
     }
 
     public void updateCartItemCount(Long cartItemId, int count){

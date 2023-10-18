@@ -2195,16 +2195,11 @@ dl, dt, dd {
     list-style: none
 }
 
-.inner-content {
-    width: 1200px;
-    margin: 0 auto;
-}
-
 .hidden {
     display: none;
 }
 
-.basket-list-group {
+.basket-list {
     overflow: auto;
     height: auto;
 }
@@ -2219,7 +2214,7 @@ dl, dt, dd {
     border: 1px solid #FDBE33;
 }
 
-.cart-basket .cart-basket-body {
+.cart-basket .basket-info {
     width: auto;
     overflow: visible;
     height: auto;
@@ -2227,43 +2222,54 @@ dl, dt, dd {
     position: relative;
 }
 
-.cart-basket .cart-basket-body .shipping-group {
+/*
+.cart-basket .basket-info .shipping-group {
     display: block;
     overflow: hidden;
 }
 
-.cart-basket .cart-basket-body .shipping-no-group {
+.cart-basket .basket-info .shipping-no-group {
     display: block;
     overflow: hidden;
 }
+*/
 
-.cart-basket .cart-basket-body .order-list {
+.cart-basket .basket-info .order-list {
     display: block;
     padding: 0 22px;
 }
 
-.cart-basket .cart-basket-body .order-idx {
+.cart-basket .basket-info .order-idx {
     height: auto;
     overflow: visible;
     padding-top: 20px;
     vertical-align: top;
 }
 
-.cart-basket .cart-basket-body .order-idx .item-check {
+.cart-basket .basket-info .order-idx .item-check {
     display: inline-block;
     float: left;
     padding-top: 3px;
 }
 
-.cart-basket .cart-basket-body .order-idx .item-img {
-    display: inline-block;
-    position: relative;
-    width: 80px;
-    float: left;
-    margin-left: 12px;
+.cart-basket .basket-info .order-idx .item-check input[type="checkbox"] {
+    position: absolute;
+    top: 0;
+    left: 0%;
+    z-index: 1;
+    width: 20px;
+    height: 20px;
+    width: 20px;
+    margin-top: 0 !important;
 }
 
-.cart-basket .cart-basket-body .order-idx .item-info {
+.cart-basket .basket-info .item-img > img {
+    width: auto;
+    max-width: 80px;
+    display: block;
+}
+
+.cart-basket .basket-info .order-idx .item-info {
     float: left;
     display: inline-block;
     width: 656px;

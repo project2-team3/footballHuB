@@ -180,34 +180,6 @@
 
 </th:block>
 
-<!-- 사용자 CSS 추가 -->
-<th:block layout:fragment="css">
-    <style>
-        .mgb-15{
-            margin-bottom:15px;
-        }
-        .mgt-30{
-            margin-top:30px;
-        }
-        .mgt-50{
-            margin-top:50px;
-        }
-        .repImgDiv{
-            margin-right:15px;
-            height:auto;
-            width:50%;
-        }
-        .repImg{
-            width:100%;
-            height:400px;
-        }
-        .wd50{
-            height:auto;
-            width:50%;
-        }
-    </style>
-</th:block>
-
 <div layout:fragment="content">
 
     <!-- SECTION -->
@@ -220,7 +192,23 @@
                     <!-- Cart List -->
                     <div id="cart-list">
                         <ol class="basket-list">
-                            <li class="cart-basket" th:each="cartItem : ${cartItems}"></li>
+                            <li class="cart-basket" th:each="cartItem : ${cartItems}">
+                                <div class="basket-info">
+                                    <ul class="order-list">
+                                        <li class="order-idx">
+                                            <div class="item">
+                                                <div class="item-check">
+                                                    <input type="checkbox" name="cartChkBox" th:id="cartItemId" th:value="${cartItem.cartItemId}">
+                                                    <label th:for="cartItemId" class="hidden">상품 선택</label>
+                                                </div>
+                                                <div class="item-img">
+                                                    <img th:src="${cartItem.imgUrl}" th:alt="${cartItem.itemNm}">
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
                         </ol>
                     </div>
                 </div>
