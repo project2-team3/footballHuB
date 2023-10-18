@@ -31,16 +31,14 @@
         <script th:src="@{/js/shop/slick.min.js}"></script>
         <script th:src="@{/js/shop/jquery.zoom.min.js}"></script>
         <script th:src="@{/js/shop/nouislider.min.js}"></script>
-
-        <th:block layout:fragment="script"></th:block>
         <th:block layout:fragment="css"></th:block>
 
-    </head>
-    <body>
-        <div th:replace="~{shop/fragments/header::header}"></div>
-        <div layout:fragment="content" class="content" style="flex-grow: 1;"></div>
-        <div th:replace="~{shop/fragments/footer::footer}"></div>
+            </head>
+            <body>
+                <div th:replace="~{shop/fragments/header::header}"></div>
+                <div layout:fragment="content" class="content" style="flex-grow: 1;"></div>
+                <div th:replace="~{shop/fragments/footer::footer}"></div>
 
-        <script th:src="@{/js/shop/main.js}"></script>
+                <script th:src="@{/js/shop/main.js}"></script>
     </body>
 </html>
