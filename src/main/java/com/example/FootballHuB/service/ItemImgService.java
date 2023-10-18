@@ -33,7 +33,7 @@ public class ItemImgService {
             imgName = fileService.uploadFile(itemImgLocation, oriImgName,
                     itemImgFile.getBytes());
 
-            imgUrl = "/imgs/item/" + imgName;
+            imgUrl = "/img/item/" + imgName;
         }
 
         //상품 이미지 정보 저장
@@ -54,7 +54,7 @@ public class ItemImgService {
 
             String oriImgName = itemImgFile.getOriginalFilename();
             String imgName = fileService.uploadFile(itemImgLocation, oriImgName, itemImgFile.getBytes());
-            String imgUrl = "/imgs/item/" + imgName;
+            String imgUrl = "/img/item/" + imgName;
             savedItemImg.updateItemImg(oriImgName, imgName, imgUrl);
         }
     }
