@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -23,7 +24,10 @@ public class ScheduleController {
 
 
     @GetMapping(value = "/")
-    public String Schedule(Model model, Authentication authentication) {
+    public String Schedule(Model model, Authentication authentication, HttpServletRequest request, HttpSession session) {
+        String nowPage = request.getRequestURL().toString();
+        request.getSession().setAttribute("nowPage", nowPage);
+        System.out.println(session.getAttribute("nowPage"));
         //사용자가 로그인한 경우에만 사용자 정보를 가져와 모델에 추가
         if (authentication != null) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
