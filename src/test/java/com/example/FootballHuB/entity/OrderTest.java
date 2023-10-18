@@ -3,7 +3,6 @@ package com.example.FootballHuB.entity;
 import com.example.FootballHuB.constant.ItemSellStatus;
 import com.example.FootballHuB.repository.ItemRepository;
 import com.example.FootballHuB.repository.MemberRepository;
-import com.example.FootballHuB.repository.OrderItemRepository;
 import com.example.FootballHuB.repository.OrderRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +17,8 @@ import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import com.example.FootballHuB.repository.OrderItemRepository;
 
 @SpringBootTest
 @TestPropertySource(locations="classpath:application-test.properties")

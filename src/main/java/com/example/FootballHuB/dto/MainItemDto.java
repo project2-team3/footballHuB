@@ -1,8 +1,7 @@
 package com.example.FootballHuB.dto;
 
-import com.querydsl.core.annotations.QueryProjection;
 import com.example.FootballHuB.entity.Category;
-import com.example.FootballHuB.entity.Rating;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,7 +20,7 @@ public class MainItemDto {
 
     private Category category;
 
-//    private double rating;
+    private double rating;
 
 //    private Long rating;
 

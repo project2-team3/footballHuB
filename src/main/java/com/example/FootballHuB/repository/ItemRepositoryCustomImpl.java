@@ -1,15 +1,18 @@
 package com.example.FootballHuB.repository;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Wildcard;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.example.FootballHuB.constant.ItemSellStatus;
 import com.example.FootballHuB.dto.ItemSearchDto;
 import com.example.FootballHuB.dto.MainItemDto;
 import com.example.FootballHuB.dto.QMainItemDto;
+import com.example.FootballHuB.entity.Category;
 import com.example.FootballHuB.entity.Item;
 import com.example.FootballHuB.entity.QItem;
 import com.example.FootballHuB.entity.QItemImg;
+import com.example.FootballHuB.service.RatingService;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Wildcard;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +25,11 @@ import java.util.List;
 public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
 
     private JPAQueryFactory queryFactory;
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private RatingService ratingService;
 
     public ItemRepositoryCustomImpl(EntityManager em){
         this.queryFactory = new JPAQueryFactory(em);
@@ -89,30 +97,35 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         return StringUtils.isEmpty(searchQuery) ? null : QItem.item.itemNm.like("%" + searchQuery + "%");
     }
 
+    private BooleanExpression itemCategory(String categoryNm) {
+        Category category = categoryRepository.findByName(categoryNm);
+        return StringUtils.isEmpty(categoryNm) ? null : QItem.item.category.eq(category);
+    }
+
     @Override
     public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
         QItem item = QItem.item;
         QItemImg itemImg = QItemImg.itemImg;
 
         List<MainItemDto> content = queryFactory
-                .select(
-                        new QMainItemDto(
-                                item.id,
-                                item.itemNm,
-                                item.itemDetail,
-                                itemImg.imgUrl,
-                                item.price,
-                                item.category
-                        )
-                )
-                .from(itemImg)
-                .join(itemImg.item, item)
-                .where(itemImg.repimgYn.eq("Y"))
-                .where(itemNmLike(itemSearchDto.getSearchQuery()))
-                .orderBy(item.id.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
+            .select(
+                new QMainItemDto(
+                    item.id,
+                    item.itemNm,
+                    item.itemDetail,
+                    itemImg.imgUrl,
+                    item.price,
+                    item.category)
+            )
+            .from(itemImg)
+            .join(itemImg.item, item)
+            .where(itemImg.repimgYn.eq("Y"))
+            .where(itemNmLike(itemSearchDto.getSearchQuery()))
+            .where(itemCategory(itemSearchDto.getCategory()))
+            .orderBy(item.id.desc())
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
 
         long total = queryFactory
                 .select(Wildcard.count)
@@ -123,6 +136,9 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
                 .fetchOne()
                 ;
 
+        for(MainItemDto mainItemDto : content) {
+            mainItemDto.setRating(ratingService.getAveByItemId(mainItemDto.getId()));
+        }
         return new PageImpl<>(content, pageable, total);
     }
 

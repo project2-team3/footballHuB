@@ -1,7 +1,6 @@
 package com.example.FootballHuB.dto;
 
 import com.example.FootballHuB.entity.Comment;
-import com.example.FootballHuB.entity.Item;
 import lombok.Getter;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;

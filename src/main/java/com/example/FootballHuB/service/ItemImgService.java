@@ -1,7 +1,7 @@
 package com.example.FootballHuB.service;
 
-import com.example.FootballHuB.repository.ItemImgRepository;
 import com.example.FootballHuB.entity.ItemImg;
+import com.example.FootballHuB.repository.ItemImgRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -27,10 +27,12 @@ public class ItemImgService {
         String imgName = "";
         String imgUrl = "";
 
+        System.out.println(oriImgName);
         //파일 업로드
         if(!StringUtils.isEmpty(oriImgName)){
             imgName = fileService.uploadFile(itemImgLocation, oriImgName,
                     itemImgFile.getBytes());
+
             imgUrl = "/imgs/item/" + imgName;
         }
 

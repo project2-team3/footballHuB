@@ -1,6 +1,5 @@
 package com.example.FootballHuB.controller.shop;
 
-import com.example.FootballHuB.dto.CommentDto;
 import com.example.FootballHuB.dto.RatingDto;
 import com.example.FootballHuB.service.RatingService;
 import lombok.RequiredArgsConstructor;
@@ -8,12 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor

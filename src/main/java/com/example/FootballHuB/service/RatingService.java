@@ -1,11 +1,9 @@
 package com.example.FootballHuB.service;
 
 import com.example.FootballHuB.dto.RatingDto;
-import com.example.FootballHuB.entity.Item;
 import com.example.FootballHuB.entity.Member;
 import com.example.FootballHuB.entity.OrderItem;
 import com.example.FootballHuB.entity.Rating;
-import com.example.FootballHuB.repository.ItemRepository;
 import com.example.FootballHuB.repository.MemberRepository;
 import com.example.FootballHuB.repository.OrderItemRepository;
 import com.example.FootballHuB.repository.RatingRepository;

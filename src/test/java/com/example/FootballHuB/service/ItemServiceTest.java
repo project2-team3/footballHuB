@@ -6,7 +6,6 @@ import com.example.FootballHuB.entity.Item;
 import com.example.FootballHuB.entity.ItemImg;
 import com.example.FootballHuB.repository.ItemImgRepository;
 import com.example.FootballHuB.repository.ItemRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +69,7 @@ class ItemServiceTest {
                 .orElseThrow(EntityNotFoundException::new);
 
         assertEquals(itemFormDto.getItemNm(), item.getItemNm());
-        Assertions.assertEquals(itemFormDto.getItemSellStatus(), item.getItemSellStatus());
+        assertEquals(itemFormDto.getItemSellStatus(), item.getItemSellStatus());
         assertEquals(itemFormDto.getItemDetail(), item.getItemDetail());
         assertEquals(itemFormDto.getPrice(), item.getPrice());
         assertEquals(itemFormDto.getStockNumber(), item.getStockNumber());
