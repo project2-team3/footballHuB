@@ -2,12 +2,14 @@ package com.example.FootballHuB.entity;
 
 import com.example.FootballHuB.constant.Role;
 import com.example.FootballHuB.dto.MemberFormDto;
+import com.example.FootballHuB.entity.gameEntity.Game;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name="member")
@@ -36,6 +38,11 @@ public class Member extends BaseEntity {
 
     private String providerId;
 
+    @OneToMany(mappedBy = "member")
+    private List<Game> games;
+
+    private Integer spinCount;
+
 //    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
 //    private List<ItemComment> itemComments = new ArrayList<>();
 
@@ -52,5 +59,10 @@ public class Member extends BaseEntity {
     }
     public String getRoleValue() {
         return this.role.getValue();
+    }
+
+    public Integer getSpinCount() {
+        // Spin count가 null인 경우 0을 반환하도록 수정
+        return spinCount != null ? spinCount : 0;
     }
 }
