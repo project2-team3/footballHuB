@@ -37,6 +37,8 @@ public class ItemService {
 
     private final CategoryRepository categoryRepository;
 
+    private final RatingService ratingService;
+
     public Long saveItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception{
 
         //상품 등록
@@ -74,6 +76,8 @@ public class ItemService {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(EntityNotFoundException::new);
         ItemFormDto itemFormDto = ItemFormDto.of(item);
+        double rating = ratingService.getAveByItemId(item.getId());
+        itemFormDto.setRating(rating);
         itemFormDto.setItemImgDtoList(itemImgDtoList);
         return itemFormDto;
     }
