@@ -32,13 +32,13 @@ public class SecurityConfig {
                 .and()
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/members/logout"))
+                .invalidateHttpSession(false)
                 .logoutSuccessHandler(new CustomLogoutSuccessHandler("/"))
                 .and()
                 .oauth2Login()
                 .successHandler(new CustomLoginSuccessHandler("/"))
                 .userInfoEndpoint()
                 .userService(principalOauth2UserService);
-        ;
 
         http.authorizeRequests()
                 .antMatchers("/chatting/**").permitAll()
