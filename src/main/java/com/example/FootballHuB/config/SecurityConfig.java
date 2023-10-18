@@ -29,16 +29,17 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.formLogin()
                 .loginPage("/members/login")
-                .defaultSuccessUrl("/")
+                .successHandler(new CustomLoginSuccessHandler("/"))
                 .usernameParameter("email")
                 .failureUrl("/members/login/error")
                 .and()
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/members/logout"))
-                .logoutSuccessUrl("/")
+                .invalidateHttpSession(false)
+                .logoutSuccessHandler(new CustomLogoutSuccessHandler("/"))
                 .and()
                 .oauth2Login()
-                .defaultSuccessUrl("/")
+                .successHandler(new CustomLoginSuccessHandler("/"))
                 .userInfoEndpoint()
                 .userService(principalOauth2UserService);
         ;

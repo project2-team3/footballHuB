@@ -33,15 +33,6 @@ public class ShopController {
         request.getSession().setAttribute("nowPage", nowPage);
         System.out.println(session.getAttribute("nowPage"));
 
-        HttpSession aa = request.getSession();
-        Enumeration<String> attributeNames = aa.getAttributeNames();
-        while (attributeNames.hasMoreElements()) {
-            String attributeName = attributeNames.nextElement();
-            Object attributeValue = session.getAttribute(attributeName);
-            System.out.println("Attribute Name: " + attributeName + ", Value: " + attributeValue);
-        }
-
-
         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
         Page<MainItemDto> items = itemService.getMainItemPage(itemSearchDto, pageable);
 
