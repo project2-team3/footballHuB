@@ -128,64 +128,64 @@
     giftsData.push({
         'image': imagePath,
         'text': giftContent
-        });
-        /*[/]*/
+    });
+    /*[/]*/
 
-        var theWheel = new Winwheel({
-                 'numSegments'  : giftsData.length,
-                 'outerRadius'  : 215 ,
-                 'textFontSize' : 28,
-                 'segments'     : giftsData,
-                 'animation' :           // Specify the animation to use.
-                 {
-                     'type'     : 'spinToStop',
-                     'duration' : 5,     // Duration in seconds.
-                     'spins'    : 8,     // Number of complete spins.
-                     'callbackFinished' : alertPrize
-                 }
-             });
+    var theWheel = new Winwheel({
+        'numSegments'  : giftsData.length,
+        'outerRadius'  : 215 ,
+        'textFontSize' : 28,
+        'segments'     : giftsData,
+        'animation' :           // Specify the animation to use.
+            {
+                'type'     : 'spinToStop',
+                'duration' : 5,     // Duration in seconds.
+                'spins'    : 8,     // Number of complete spins.
+                'callbackFinished' : alertPrize
+            }
+    });
 
-             // Vars used by the code in this page to do power controls.
-             let wheelPower    = 0;
-             let wheelSpinning = false;
+    // Vars used by the code in this page to do power controls.
+    let wheelPower    = 0;
+    let wheelSpinning = false;
 
-             // -------------------------------------------------------
-             // Function to handle the onClick on the power buttons.
-             // -------------------------------------------------------
-             function powerSelected(powerLevel)
-             {
-                 // Ensure that power can't be changed while wheel is spinning.
-                 if (wheelSpinning == false) {
-                     // Reset all to grey incase this is not the first time the user has selected the power.
-                     document.getElementById('pw1').className = "";
-                     document.getElementById('pw2').className = "";
-                     document.getElementById('pw3').className = "";
+    // -------------------------------------------------------
+    // Function to handle the onClick on the power buttons.
+    // -------------------------------------------------------
+    function powerSelected(powerLevel)
+    {
+        // Ensure that power can't be changed while wheel is spinning.
+        if (wheelSpinning == false) {
+            // Reset all to grey incase this is not the first time the user has selected the power.
+            document.getElementById('pw1').className = "";
+            document.getElementById('pw2').className = "";
+            document.getElementById('pw3').className = "";
 
-                     // Now light up all cells below-and-including the one selected by changing the class.
-                     if (powerLevel >= 1) {
-                         document.getElementById('pw1').className = "pw1";
-                     }
+            // Now light up all cells below-and-including the one selected by changing the class.
+            if (powerLevel >= 1) {
+                document.getElementById('pw1').className = "pw1";
+            }
 
-                     if (powerLevel >= 2) {
-                         document.getElementById('pw2').className = "pw2";
-                     }
+            if (powerLevel >= 2) {
+                document.getElementById('pw2').className = "pw2";
+            }
 
-                     if (powerLevel >= 3) {
-                         document.getElementById('pw3').className = "pw3";
-                     }
+            if (powerLevel >= 3) {
+                document.getElementById('pw3').className = "pw3";
+            }
 
-                     // Set wheelPower var used when spin button is clicked.
-                     wheelPower = powerLevel;
+            // Set wheelPower var used when spin button is clicked.
+            wheelPower = powerLevel;
 
-                     // Light up the spin button by changing it's source image and adding a clickable class to it.
-                     document.getElementById('spin_button').src = /*[[@{/images/roulette/spin_on.png}]]*/ '';
-                     document.getElementById('spin_button').className = "clickable";
-                 }
-             }
+            // Light up the spin button by changing it's source image and adding a clickable class to it.
+            document.getElementById('spin_button').src = /*[[@{/images/roulette/spin_on.png}]]*/ '';
+            document.getElementById('spin_button').className = "clickable";
+        }
+    }
 
-             // -------------------------------------------------------
-             // Click handler for spin button.
-             // -------------------------------------------------------
+    // -------------------------------------------------------
+    // Click handler for spin button.
+    // -------------------------------------------------------
 
              /*<![CDATA[*/
                 var loggedInUser = /*[[${session.username}]]*/ null;

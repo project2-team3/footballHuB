@@ -60,4 +60,9 @@ public class Member extends BaseEntity {
     public String getRoleValue() {
         return this.role.getValue();
     }
+
+    public Integer getSpinCount() {
+        // Spin count가 null인 경우 0을 반환하도록 수정
+        return spinCount != null ? spinCount : 0;
+    }
 }
