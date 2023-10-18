@@ -21,4 +21,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "where o.member.email = :email"
     )
     Long countOrder(@Param("email") String email);
+
+    Long countByMemberId(long id);
 }

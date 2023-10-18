@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-
+<html xmlns:th="http://www.thymeleaf.org">
+<script th:inline="javascript">
+    console.log("아 왜안돼지");
+</script>
 <div th:fragment="header">
     <header>
         <div id="top-header">
@@ -37,56 +38,6 @@
                 </ul>
             </div>
         </div>
-        <div id="header">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="header-logo">
-                            <a href="/shop" class="logo">
-                                <img th:src="@{imgs}" alt="">
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="header-search">
-<!--                            <input type="hidden" name="searchQuery" th:value="${itemSearchDto.searchQuery}">-->
-<!--                            <div th:if="${not #strings.isEmpty(itemSearchDto.searchQuery)}" class="center">-->
-<!--                                <p class="h3 font-weight-bold" th:text="${itemSearchDto.searchQuery} + '검색 결과'"></p>-->
-<!--                            </div>-->
-                            <form th:action="@{/}" method="get">
-                                <input name="searchQuery" class="input" placeholder="Search here">
-                                <button class="search-btn">Search</button>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="col-md-3 clearfix">
-                        <div class="header-ctn">
-                            <div sec:authorize="isAuthenticated()">
-                                <a href="/shop/cart">
-                                    <i class="fa fa-shopping-cart"></i>
-                                    <span>Your Cart</span>
-                                    <div class="qty">2</div>
-                                </a>
-                            </div>
-                            <div sec:authorize="isAuthenticated()">
-                                <a href="/shop/orders">
-                                    <i class="fa fa-check-square"></i>
-                                    <span>Purchase</span>
-                                    <div class="qty">3</div>
-                                </a>
-                            </div>
-                            <div class="menu-toggle">
-                                <a href="#">
-                                    <i class="fa fa-bars"></i>
-                                    <span>Menu</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </header>
 </div>
-
 </html>

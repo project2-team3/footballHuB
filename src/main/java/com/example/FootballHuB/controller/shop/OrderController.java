@@ -1,6 +1,12 @@
 package com.example.FootballHuB.controller.shop;
 
+import com.example.FootballHuB.dto.CategoryDto;
 import com.example.FootballHuB.dto.OrderDto;
+import com.example.FootballHuB.entity.Member;
+import com.example.FootballHuB.repository.CartRepository;
+import com.example.FootballHuB.repository.MemberRepository;
+import com.example.FootballHuB.repository.OrderRepository;
+import com.example.FootballHuB.service.CategoryService;
 import com.example.FootballHuB.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,6 +36,13 @@ import java.util.Optional;
 public class OrderController {
 
     private final OrderService orderService;
+
+    private final CartRepository cartRepository;
+    private final CategoryService categoryService;
+
+    private final MemberRepository memberRepository;
+
+    private final OrderRepository orderRepository;
 
     @PostMapping(value = "/shop/order")
     public @ResponseBody ResponseEntity order(@RequestBody @Valid OrderDto orderDto
@@ -63,7 +76,20 @@ public class OrderController {
 
         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 4);
         Page<OrderHistDto> ordersHistDtoList = orderService.getOrderList(principal.getName(), pageable);
+        List<CategoryDto> categoryDtoList =  categoryService.getAllCategory();
+        long cartCount = 0;
+        long orderCount = 0;
+        if(principal != null) {
+            Member member = memberRepository.findByEmail(principal.getName());
+            cartCount = cartRepository.countByMemberId(member.getId());
 
+            orderCount = orderRepository.countByMemberId(member.getId());
+            System.out.println(cartCount);
+        }
+
+        model.addAttribute("cartCount", cartCount);
+        model.addAttribute("orderCount", orderCount);
+        model.addAttribute("categoryDtoList", categoryDtoList);
         model.addAttribute("orders", ordersHistDtoList);
         model.addAttribute("page", pageable.getPageNumber());
         model.addAttribute("maxPage", 5);

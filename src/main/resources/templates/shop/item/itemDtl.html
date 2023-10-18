@@ -12,6 +12,7 @@
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
     <script th:inline="javascript">
+        var reviewCount = 0;
         $(document).ready(function(){
             calculateToalPrice();
             getCommentList();
@@ -23,6 +24,11 @@
                 calculateToalPrice();
             });
         });
+
+        const setReviewCount = () => {
+            const $reviewCount = $('#reviewCount');
+            $reviewCount[0].innerText = reviewCount;
+        }
 
         function getCommentList() {
             var token = $("meta[name='_csrf']").attr("content");
@@ -39,7 +45,9 @@
                 dataType : "json",
                 cache   : false,
                 success  : function(result, status){
-                    for(let i = 0; i < result.length; i++) {
+                    reviewCount = result.length;
+                    setReviewCount();
+                    for(let i = 0; i < reviewCount; i++) {
                         addCommentEle(result[i]);
                     }
                 },
@@ -126,8 +134,9 @@
                 dataType : "json",
                 cache   : false,
                 success  : function(result, status){
-                    console.log(result);
                     addCommentEle(result);
+                    reviewCount++;
+                    setReviewCount();
                 },
                 error : function(jqXHR, status, error){
 
@@ -227,6 +236,64 @@
 </th:block>
 
 <div layout:fragment="content">
+    <div id="header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="header-logo">
+                        <a href="/shop" class="logo">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="header-search">
+                        <form th:action="@{/shop}" method="get">
+                            <input name="searchQuery" class="input" placeholder="Search here">
+                            <button class="search-btn">Search</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-3 clearfix">
+                    <div class="header-ctn">
+                        <div sec:authorize="isAuthenticated()">
+                            <a href="/shop/cart">
+                                <i class="fa fa-shopping-cart"></i>
+                                <span>Your Cart</span>
+                                <div class="qty">[[${cartCount}]]</div>
+                            </a>
+                        </div>
+                        <div sec:authorize="isAuthenticated()">
+                            <a href="/shop/orders">
+                                <i class="fa fa-check-square"></i>
+                                <span>Order</span>
+                                <div class="qty">[[${orderCount}]]</div>
+                            </a>
+                        </div>
+                        <div class="menu-toggle">
+                            <a href="#">
+                                <i class="fa fa-bars"></i>
+                                <span>Menu</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav id="navigation">
+        <div class="container">
+            <div id="responsive-nav">
+                <ul class="main-nav nav navbar-nav">
+                    <li class="nav-list" id="nav-all"><a href="/shop">All</a></li>
+                    <li class="nav-list" th:id="'nav-'+${categoryDto.name}" th:each="categoryDto : ${categoryDtoList}">
+                        <a th:href="@{'/shop?category='+${categoryDto.name}}" th:inline="text" >
+                            [[${categoryDto.name}]]
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <input type="hidden" id="itemId" th:value="${item.id}">
 
     <!-- SECTION -->
@@ -302,7 +369,7 @@
                     <div id="product-tab">
                         <!-- product tab nav -->
                         <ul class="tab-nav">
-                            <li><a data-toggle="tab" href="#tab1">Reviews (3)</a></li>
+                            <li><a data-toggle="tab" href="#tab1">Reviews (<span id="reviewCount">0</span>)</a></li>
                         </ul>
                         <div class="tab-content">
                             <div id="tab1" class="tab-pane fade in active">
