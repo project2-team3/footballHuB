@@ -37,6 +37,8 @@ public class ItemFormDto {
 
     private List<Long> itemImgIds = new ArrayList<>();
 
+    private double rating;
+
     private static ModelMapper modelMapper = new ModelMapper();
 
     public Item createItem(){
