@@ -2191,6 +2191,10 @@ textarea.input {
 	13 -> CUSTOM BY 2A
 ===========================================================*/
 
+/*COLORS
+yellow: #bbae94
+*/
+
 dl, dt, dd {
     list-style: none
 }
@@ -2207,7 +2211,7 @@ dl, dt, dd {
 .cart-basket {
     width: 824px;
     margin-bottom: 16px;
-    background: #333;
+    background-color: #f8f7f6;
     overflow: hidden;
     height: auto;
     border-radius: 8px;
@@ -2279,7 +2283,7 @@ dl, dt, dd {
 
 .unit-item {
     padding: 20px 0 0 0;
-    border-top: 1px solid #333;
+    border-top: 1px solid #FDBE33;
     position: relative;
 }
 
@@ -2292,17 +2296,17 @@ dl, dt, dd {
     width: 100%;
     height: auto;
     position: relative;
+    min-height: 40px;
     padding-bottom: 20px;
 }
 
-.unit-item .unit-item-desc .section .item-title {
+.unit-item .first .unit-item-desc .section .item-title {
     display: block;
-    width: 100%;
-    float: none;
 }
 
-.unit-item .unit-item-desc .section .item-title a {
-    display: inline-block;
+.unit-item .unit-item-desc .section .item-title {
+    width: 100%;
+    float: none;
 }
 
 .unit-item .unit-item-desc .section .item-title .item-name {
@@ -2311,11 +2315,7 @@ dl, dt, dd {
     margin-bottom: 0;
 }
 
-.unit-item .unit-item-desc .section {
-    float: left;
-}
-
-.unit-item .unit-item-desc .section .item-qty {
+.unit-item .first .unit-item-desc .section-wrapper {
     float: none;
     position: absolute;
     right: 267px;
@@ -2327,25 +2327,6 @@ dl, dt, dd {
     margin-right: 12px;
 }
 
-.unit-item .unit-item-desc .section .item-qty .item-qty-wrap {
-    position: relative;
-    vertical-align: middle;
-    height: 100%;
-    margin-top: 2px;
-}
-
-.unit-item .unit-item-desc .section. item-qty .item-qty-count {
-    display: inline-block;
-    width: 30px;
-    height: 21px;
-    /* margin-left: 30px; */
-    border: 1px solid #ececec;
-    line-height: 21px;
-    color: #233549;
-    font-size: 14px;
-    text-align: center;
-    background: #fff;
+.unit-item .unit-item-desc .section {
     float: left;
-    margin: 0 27px;
-    padding: 0;
 }
