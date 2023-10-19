@@ -1,6 +1,10 @@
 package com.example.FootballHuB.controller.shop;
 
 import com.example.FootballHuB.dto.CategoryDto;
+import com.example.FootballHuB.entity.Member;
+import com.example.FootballHuB.repository.CartRepository;
+import com.example.FootballHuB.repository.MemberRepository;
+import com.example.FootballHuB.repository.OrderRepository;
 import com.example.FootballHuB.service.CategoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +19,8 @@ import javax.validation.Valid;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +39,13 @@ public class ItemController {
 
     private final ItemService itemService;
     private final CategoryService categoryService;
+
+    private final CartRepository cartRepository;
+
+    private final MemberRepository memberRepository;
+
+    private final OrderRepository orderRepository;
+
 
     @GetMapping(value = "/shop/admin/item/new")
     public String itemForm(Model model){
@@ -117,8 +130,23 @@ public class ItemController {
     }
 
     @GetMapping(value = "/shop/item/{itemId}")
-    public String itemDtl(Model model, @PathVariable("itemId") Long itemId){
+    public String itemDtl(Model model, @PathVariable("itemId") Long itemId, Principal principal){
         ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
+
+        List<CategoryDto> categoryDtoList =  categoryService.getAllCategory();
+        long cartCount = 0;
+        long orderCount = 0;
+        if(principal != null) {
+            Member member = memberRepository.findByEmail(principal.getName());
+            cartCount = cartRepository.countByMemberId(member.getId());
+
+            orderCount = orderRepository.countByMemberId(member.getId());
+            System.out.println(cartCount);
+        }
+
+        model.addAttribute("cartCount", cartCount);
+        model.addAttribute("orderCount", orderCount);
+        model.addAttribute("categoryDtoList", categoryDtoList);
         model.addAttribute("item", itemFormDto);
         return "shop/item/itemDtl";
     }

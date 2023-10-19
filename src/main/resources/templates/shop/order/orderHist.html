@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{shop/layouts/layout}">
 
 <head>
@@ -115,6 +116,64 @@
 </th:block>
 
 <div layout:fragment="content" class="content-mg">
+    <div id="header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="header-logo">
+                        <a href="/shop" class="logo">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="header-search">
+                        <form th:action="@{/shop}" method="get">
+                            <input name="searchQuery" class="input" placeholder="Search here">
+                            <button class="search-btn">Search</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-3 clearfix">
+                    <div class="header-ctn">
+                        <div sec:authorize="isAuthenticated()">
+                            <a href="/shop/cart">
+                                <i class="fa fa-shopping-cart"></i>
+                                <span>Your Cart</span>
+                                <div class="qty">[[${cartCount}]]</div>
+                            </a>
+                        </div>
+                        <div sec:authorize="isAuthenticated()">
+                            <a href="/shop/orders">
+                                <i class="fa fa-check-square"></i>
+                                <span>Order</span>
+                                <div class="qty">[[${orderCount}]]</div>
+                            </a>
+                        </div>
+                        <div class="menu-toggle">
+                            <a href="#">
+                                <i class="fa fa-bars"></i>
+                                <span>Menu</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav id="navigation">
+        <div class="container">
+            <div id="responsive-nav">
+                <ul class="main-nav nav navbar-nav">
+                    <li class="nav-list" id="nav-all"><a href="/shop">All</a></li>
+                    <li class="nav-list" th:id="'nav-'+${categoryDto.name}" th:each="categoryDto : ${categoryDtoList}">
+                        <a th:href="@{'/shop?category='+${categoryDto.name}}" th:inline="text" >
+                            [[${categoryDto.name}]]
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <div class="container">
         <div class="section">
             <div class="container">
