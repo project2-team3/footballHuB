@@ -81,9 +81,10 @@ public class OrderController {
         long orderCount = 0;
         if(principal != null) {
             Member member = memberRepository.findByEmail(principal.getName());
-            cartCount = cartRepository.countByMemberId(member.getId());
-
-            orderCount = orderRepository.countByMemberId(member.getId());
+            if(member != null) {
+                cartCount = cartRepository.countByMemberId(member.getId());
+                orderCount = orderRepository.countByMemberId(member.getId());
+            }
             System.out.println(cartCount);
         }
 
