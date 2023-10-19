@@ -71,6 +71,9 @@
         .clickable {
             cursor: pointer;
         }
+        #spinCountDisplay {
+            color: yellow; /* 노란색으로 텍스트 색상 변경 */
+        }
 
         /* Other misc styles */
         .margin_bottom {
@@ -113,7 +116,7 @@
                     <br />
                     <img id="spin_button" th:src="@{/images/roulette/spin_off.png}" alt="Spin" onClick="startSpin();" />
                     <br /><br />
-                    &nbsp;&nbsp;<a href="#" onClick="resetWheel(); return false;">Play Again</a><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(reset)
+<!--                    &nbsp;&nbsp;<a href="#" onClick="resetWheel(); return false;">Play Again</a><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(reset)-->
                     <!-- 여기에서 spinCount를 표시할 엘리먼트에 ID를 할당합니다. -->
                     <div id="spinCountDisplay" th:text="'오늘 남은 참여 횟수: ' + ${spinCount}"></div>
                 </div>
