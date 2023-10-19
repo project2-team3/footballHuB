@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout_game}">>
 
-<head>
+    <head>
+
     <meta charset="UTF-8">
     <meta name="_csrf" th:content="${_csrf.token}" />
     <meta name="_csrf_header" th:content="${_csrf.headerName}" />
@@ -12,24 +14,27 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
 
     <style>
-        body {
-            font-family: arial;
-        }
+
 
         td.the_wheel {
             background-image: url('/images/roulette/wheel_back.png');
-            background-position: center;
+            background-position: center top -5px ;
             background-repeat: none;
             background-size:100% 100%;
+
         }
 
         /* Do some css reset on selected elements */
         h1, p {
-            margin: 0;
+            margin-top: -5px;
+        }
+        .myTable {
+            margin-right: 200px;
         }
 
+
         div.power_controls {
-            margin-right: 70px;
+            margin-right: 20px;
         }
 
         div.html5_logo {
@@ -37,15 +42,17 @@
         }
 
         /* Styles for the power selection controls */
+
         table.power {
-            background-color: #cccccc;
+            background-color: navy;
             cursor: pointer;
-            border: 1px solid #333333;
+            border: 1px solid white;
         }
 
         table.power th {
-            background-color: white;
+            background-color: navy;
             cursor: default;
+            border: 1px solid white;
         }
 
         td.pw1 {
@@ -70,21 +77,25 @@
             margin-bottom: 5px;
         }
     </style>
+
 </head>
+
 <body>
 
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<div layout:fragment="content">
 <div align="center">
-    <h1>룰렛 게임 !!</h1>
+    <br /><br /><br /><br /><br />
+    <h1>도전 매일 룰렛 !!</h1>
     <br />
-    <br />
-    <table cellpadding="0" cellspacing="0" border="0">
+    <h3> 매일 주어지는 기회는 단 한 번 !</h3>
+
+    <table class="myTable" cellpadding="0" cellspacing="0" border="0">
         <tr>
             <td>
                 <div class="power_controls">
-                    <br />
-                    <br />
                     <table class="power" cellpadding="10" cellspacing="0">
                         <tr>
                             <th align="center">Power</th>
@@ -93,7 +104,7 @@
                             <td width="78" align="center" id="pw3" onClick="powerSelected(3);">High</td>
                         </tr>
                         <tr>
-                            <td align="center" id="pw2" onClick="powerSelected(2);">Med</td>
+                            <td align="center" id="pw2" onClick="powerSelected(2);">Medium</td>
                         </tr>
                         <tr>
                             <td align="center" id="pw1" onClick="powerSelected(1);">Low</td>
@@ -104,11 +115,11 @@
                     <br /><br />
                     &nbsp;&nbsp;<a href="#" onClick="resetWheel(); return false;">Play Again</a><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(reset)
                     <!-- 여기에서 spinCount를 표시할 엘리먼트에 ID를 할당합니다. -->
-                    <div id="spinCountDisplay" th:text="'남은 스핀 횟수: ' + ${spinCount}"></div>
+                    <div id="spinCountDisplay" th:text="'오늘 남은 참여 횟수: ' + ${spinCount}"></div>
                 </div>
             </td>
-            <td width="438" height="582" class="the_wheel" align="center" valign="center">
-                <canvas id="canvas" width="434" height="434">
+            <td width="484" height="648" class="the_wheel" align="center" valign="center">
+                <canvas id="canvas" width="484" height="484">
                     <p style="color: white" align="center">Sorry, your browser doesn't support canvas. Please try another.</p>
                 </canvas>
             </td>
@@ -133,7 +144,7 @@
 
     var theWheel = new Winwheel({
         'numSegments'  : giftsData.length,
-        'outerRadius'  : 215 ,
+        'outerRadius'  : 240 ,
         'textFontSize' : 28,
         'segments'     : giftsData,
         'animation' :           // Specify the animation to use.
@@ -290,5 +301,8 @@
              }
 
 </script>
+</div>
 </body>
+</div>
+
 </html>

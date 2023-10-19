@@ -540,11 +540,11 @@ Winwheel.prototype.drawSegmentImages = function()
                     let imageAngle = 0;
                     let imageDirection = '';
 
-                    // Get scaled width and height of the segment image.
+                    // 이미지 크기 조정.
                     //let scaledWidth = (seg.imgData.width * this.scaleFactor);
                     //let scaledHeight = (seg.imgData.height * this.scaleFactor);
-                    let scaledWidth = 100; // 원하는 너비로 조정
-                    let scaledHeight = 100; // 원하는 높이로 조정
+                    let scaledWidth = 130; // 원하는 너비로 조정
+                    let scaledHeight = 130; // 원하는 높이로 조정
 
 
                     if (seg.imageDirection !== null) {
@@ -589,7 +589,7 @@ Winwheel.prototype.drawSegmentImages = function()
                         imageLeft = (centerX - (scaledWidth / 2)) ;
 
                         // Top so image is its height out (above) the center point.
-                        imageTop = (centerY - scaledHeight) -100;
+                        imageTop = (centerY - scaledHeight) -90; // 이미지 위치 이동
 
                         // Angle to draw the image is its starting angle + half its size.
                         // this sits it half/half over the center angle of the segment.
