@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout_game}">>
+
+    <head>
+
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+    <title>Winning Wheel</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/Winwheel.js}"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+
+    <style>
+
+
+        td.the_wheel {
+            background-image: url('/images/roulette/wheel_back.png');
+            background-position: center top -5px ;
+            background-repeat: none;
+            background-size:100% 100%;
+
+        }
+
+        /* Do some css reset on selected elements */
+        h1, p {
+            margin-top: -5px;
+        }
+        .myTable {
+            margin-right: 200px;
+        }
+
+
+        div.power_controls {
+            margin-right: 20px;
+        }
+
+        div.html5_logo {
+            margin-left: 70px;
+        }
+
+        /* Styles for the power selection controls */
+
+        table.power {
+            background-color: navy;
+            cursor: pointer;
+            border: 1px solid white;
+        }
+
+        table.power th {
+            background-color: navy;
+            cursor: default;
+            border: 1px solid white;
+        }
+
+        td.pw1 {
+            background-color: #6fe8f0;
+        }
+
+        td.pw2 {
+            background-color: #86ef6f;
+        }
+
+        td.pw3 {
+            background-color: #ef6f6f;
+        }
+
+        /* Style applied to the spin button once a power has been selected */
+        .clickable {
+            cursor: pointer;
+        }
+        #spinCountDisplay {
+            color: yellow; /* 노란색으로 텍스트 색상 변경 */
+        }
+
+        /* Other misc styles */
+        .margin_bottom {
+            margin-bottom: 5px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<div layout:fragment="content">
+<div align="center">
+    <br /><br /><br /><br /><br />
+    <h1>도전 매일 룰렛 !!</h1>
+    <br />
+    <h3> 매일 주어지는 기회는 단 한 번 !</h3>
+
+    <table class="myTable" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+            <td>
+                <div class="power_controls">
+                    <table class="power" cellpadding="10" cellspacing="0">
+                        <tr>
+                            <th align="center">Power</th>
+                        </tr>
+                        <tr>
+                            <td width="78" align="center" id="pw3" onClick="powerSelected(3);">High</td>
+                        </tr>
+                        <tr>
+                            <td align="center" id="pw2" onClick="powerSelected(2);">Medium</td>
+                        </tr>
+                        <tr>
+                            <td align="center" id="pw1" onClick="powerSelected(1);">Low</td>
+                        </tr>
+                    </table>
+                    <br />
+                    <img id="spin_button" th:src="@{/images/roulette/spin_off.png}" alt="Spin" onClick="startSpin();" />
+                    <br /><br />
+<!--                    &nbsp;&nbsp;<a href="#" onClick="resetWheel(); return false;">Play Again</a><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(reset)-->
+                    <!-- 여기에서 spinCount를 표시할 엘리먼트에 ID를 할당합니다. -->
+                    <div id="spinCountDisplay" th:text="'오늘 남은 참여 횟수: ' + ${spinCount}"></div>
+                </div>
+            </td>
+            <td width="484" height="648" class="the_wheel" align="center" valign="center">
+                <canvas id="canvas" width="484" height="484">
+                    <p style="color: white" align="center">Sorry, your browser doesn't support canvas. Please try another.</p>
+                </canvas>
+            </td>
+        </tr>
+    </table>
+    <div th:if="${#lists.isEmpty(giftsList)}">
+        <p>선물이 없습니다</p>
+    </div>
+</div>
+
+<script th:inline="javascript">
+
+    var giftsData = [];
+    /*[# th:each="gift : ${giftsList}"]*/
+    var imagePath = /*[[@{'/images/roulette/' + ${gift.giftImage} + '?gift=GameGift(giftId%3D' + ${gift.giftId} + ',%20giftName%3D' + ${gift.giftName} + ',%20giftContent%3D' + ${gift.giftContent} + ',%20giftImage%3D' + ${gift.giftImage} + ')'}]]*/ '';
+    var giftContent = /*[[${gift.giftContent}]]*/ '';
+    giftsData.push({
+        'image': imagePath,
+        'text': giftContent
+    });
+    /*[/]*/
+
+    var theWheel = new Winwheel({
+        'numSegments'  : giftsData.length,
+        'outerRadius'  : 240 ,
+        'textFontSize' : 28,
+        'segments'     : giftsData,
+        'animation' :           // Specify the animation to use.
+            {
+                'type'     : 'spinToStop',
+                'duration' : 5,     // Duration in seconds.
+                'spins'    : 8,     // Number of complete spins.
+                'callbackFinished' : alertPrize
+            }
+    });
+
+    // Vars used by the code in this page to do power controls.
+    let wheelPower    = 0;
+    let wheelSpinning = false;
+
+    // -------------------------------------------------------
+    // Function to handle the onClick on the power buttons.
+    // -------------------------------------------------------
+    function powerSelected(powerLevel)
+    {
+        // Ensure that power can't be changed while wheel is spinning.
+        if (wheelSpinning == false) {
+            // Reset all to grey incase this is not the first time the user has selected the power.
+            document.getElementById('pw1').className = "";
+            document.getElementById('pw2').className = "";
+            document.getElementById('pw3').className = "";
+
+            // Now light up all cells below-and-including the one selected by changing the class.
+            if (powerLevel >= 1) {
+                document.getElementById('pw1').className = "pw1";
+            }
+
+            if (powerLevel >= 2) {
+                document.getElementById('pw2').className = "pw2";
+            }
+
+            if (powerLevel >= 3) {
+                document.getElementById('pw3').className = "pw3";
+            }
+
+            // Set wheelPower var used when spin button is clicked.
+            wheelPower = powerLevel;
+
+            // Light up the spin button by changing it's source image and adding a clickable class to it.
+            document.getElementById('spin_button').src = /*[[@{/images/roulette/spin_on.png}]]*/ '';
+            document.getElementById('spin_button').className = "clickable";
+        }
+    }
+
+    // -------------------------------------------------------
+    // Click handler for spin button.
+    // -------------------------------------------------------
+
+             /*<![CDATA[*/
+                var loggedInUser = /*[[${session.username}]]*/ null;
+             /*]]>*/
+             console.log(loggedInUser);
+             var spinCount = /*[[${spinCount}]]*/;
+             console.log(spinCount);
+
+             function updateSpinCount() {
+                var userEmail = loggedInUser; // 세션에 저장된 이메일 정보
+                var requestData = {
+                    email: userEmail, // 이메일 정보 추가
+                    spinCount: spinCount
+                };
+                // Ajax 요청을 보내어 스핀 카운트 업데이트
+                $.ajax({
+                    type: 'POST',
+                    url: '/update-spin-count', // 업데이트를 처리할 컨트롤러 경로
+                    data: JSON.stringify(requestData),
+                    contentType : 'application/json',
+                    beforeSend: function(xhr) {
+                        // CSRF 토큰을 요청 헤더에 추가
+                        xhr.setRequestHeader($("meta[name='_csrf_header']").attr("content"), $("meta[name='_csrf']").attr("content"));
+                    },
+                    success: function(response) {
+                        // 업데이트 성공 시 실행할 코드
+                        console.log('스핀 카운트가 업데이트되었습니다.');
+
+                    },
+                    error: function(error) {
+                        // 업데이트 실패 시 실행할 코드
+                        console.error('스핀 카운트 업데이트에 실패했습니다.');
+                    }
+                });
+            }
+            function updateSpinCountDisplay(spinCount) {
+                // 업데이트된 스핀 카운트를 화면에 반영
+                document.getElementById('spinCountDisplay').innerText = '남은 스핀 횟수: ' + spinCount;
+            }
+             function startSpin(){
+                if (loggedInUser !== null ) {
+                    if (spinCount > 0) {
+                    // Ensure that spinning can't be clicked again while already running.
+                        if (wheelSpinning == false ) {
+                     // Based on the power level selected adjust the number of spins for the wheel, the more times is has
+                     // to rotate with the duration of the animation the quicker the wheel spins.
+                             if (wheelPower == 1) {
+                                 theWheel.animation.spins = 3;
+                             } else if (wheelPower == 2) {
+                                 theWheel.animation.spins = 8;
+                             } else if (wheelPower == 3) {
+                                 theWheel.animation.spins = 15;
+                             }
+
+                     // Disable the spin button so can't click again while wheel is spinning.
+                             document.getElementById('spin_button').src = /*[[@{/images/roulette/spin_on.png}]]*/ '';
+                             document.getElementById('spin_button').className = "";
+
+                     // Begin the spin animation by calling startAnimation on the wheel object.
+                            theWheel.startAnimation();
+
+                     // Set to true so that power can't be changed and spin button re-enabled during
+                     // the current animation. The user will have to reset before spinning again.
+                     wheelSpinning = true;
+
+                        // Decrement spinCount by 1
+                         spinCount--;
+                         updateSpinCountDisplay(spinCount);
+                         updateSpinCount();
+                   }
+                } else {
+                    alert ("스핀 횟수가 부족합니다. 더 이상 돌릴 수 없습니다.");
+                }
+            }  else {
+                  alert("로그인해주세요 !!");
+             }
+        }
+             // -------------------------------------------------------
+             // Function for reset button.
+             // -------------------------------------------------------
+             function resetWheel()
+             {
+                 theWheel.stopAnimation(false);  // Stop the animation, false as param so does not call callback function.
+                 theWheel.rotationAngle = 0;     // Re-set the wheel angle to 0 degrees.
+                 theWheel.draw();                // Call draw to render changes to the wheel.
+
+                 document.getElementById('pw1').className = "";  // Remove all colours from the power level indicators.
+                 document.getElementById('pw2').className = "";
+                 document.getElementById('pw3').className = "";
+
+                 wheelSpinning = false;          // Reset to false to power buttons and spin can be clicked again.
+             }
+
+             // -------------------------------------------------------
+             // Called when the spin animation has finished by the callback feature of the wheel because I specified callback in the parameters
+             // note the indicated segment is passed in as a parmeter as 99% of the time you will want to know this to inform the user of their prize.
+             // -------------------------------------------------------
+             function alertPrize(indicatedSegment)
+             {
+                 // Do basic alert of the segment text. You would probably want to do something more interesting with this information.
+                 alert(indicatedSegment.text);
+             }
+
+</script>
+</div>
+</body>
+</div>
+
+</html>

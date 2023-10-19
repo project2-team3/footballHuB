@@ -3,6 +3,7 @@ package com.example.FootballHuB.controller;
 import com.example.FootballHuB.dto.MemberFormDto;
 import com.example.FootballHuB.service.MemberService;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import org.springframework.validation.BindingResult;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Map;
 
 @RequestMapping("/members")
 @Controller
@@ -48,7 +51,11 @@ public class MemberController {
     }
 
     @GetMapping(value = "/login")
-    public String loginMember(){
+    public String loginMember(HttpServletRequest request){
+
+        String prevPage = request.getHeader("Referer");
+        request.getSession().setAttribute("prevPage", prevPage);
+
         return "/member/memberLoginForm";
     }
 

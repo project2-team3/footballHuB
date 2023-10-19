@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<div th:fragment="header">
+    <div class="site-mobile-menu site-navbar-target">
+        <div class="site-mobile-menu-header">
+            <div class="site-mobile-menu-close">
+                <span class="icon-close2 js-menu-toggle"></span>
+            </div>
+        </div>
+        <div class="site-mobile-menu-body"></div>
+    </div>
+    <header class="site-navbar py-4" role="banner">
+        <div class="container">
+            <div class="d-flex align-items-center">
+                <div class="site-logo we">
+                    <a href="/">
+                        <img th:src="@{/images/logo/FootballHublogo.svg}" alt="Logo" width="100px" height="100px" class="bounce-top"/>
+                    </a>
+                </div>
+                <div class="ml-auto">
+                    <nav class="site-navigation position-relative text-right"
+                         role="navigation">
+                        <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
+                            <li >
+                                <a href="/" class="nav-link">Home</a>
+                            </li>
+                            <li><a href="#matches" class="nav-link">Matches</a></li>
+                            <li><a href="/shop" class="nav-link">Shop</a></li>
+                            <li><a href="/community" class="nav-link">Community</a></li>
+                            <li class="active"
+                                ><a href="/game" class="nav-link">Event Game</a>
+                            </li>
+                            <li sec:authorize="isAnonymous()">
+                                <a href="/members/login"><i class="fa fa-sign-in"></i> Login</a>
+                            </li>
+                            <li sec:authorize="isAuthenticated()">
+                                <a href="/members/logout"><i class="fa fa-sign-out"></i> Logout</a>
+                            </li>
+                        </ul>
+                    </nav>
+
+                    <a href="#"
+                       class="d-inline-block d-lg-none site-menu-toggle js-menu-toggle text-black float-right text-white">
+                        <span class="icon-menu h3 text-white"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+</div>
+
+</html>
