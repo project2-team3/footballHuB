@@ -41,7 +41,7 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member")
     private List<Game> games;
 
-    private Integer spinCount;
+    private Integer spinCount = 1;
 
 //    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
 //    private List<ItemComment> itemComments = new ArrayList<>();
