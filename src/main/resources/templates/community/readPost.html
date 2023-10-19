@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
+layout:decorate="~{community/writeLayout}">>
+<head>
+    <title>게시판 글 보기</title>
+</head>
+<div layout:fragment="content">
+    <nav id="navigation">
+        <div class="container">
+            <div id="responsive-nav">
+                <ul class="main-nav nav navbar-nav">
+                    <li class="nav-list" id="nav-all"><a href="/gall"></a></li>
+                    </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+<body>
+<h1>게시판 글 보기</h1>
+
+<div>
+    <h2 id="postTitle">게시물 제목</h2>
+    <p>작성자: <span id="postAuthor">작성자 이름</span></p>
+    <p>작성 시간: <span id="postDateTime">작성 시간</span></p>
+    <p>게시물 내용:</p>
+    <div id="postContent">게시물 내용이 여기에 나타납니다.</div>
+</div>
+
+<button id="goToList">목록으로</button>
+<button id="editPost">수정</button>
+<button id="deletePost">삭제</button>
+
+<script>
+    // URL에서 아이디 추출
+    const postId = window.location.pathname.split('/').pop();
+
+    // 서버로부터 데이터를 가져오는 함수
+    function fetchPostDetails(postId) {
+        fetch(`/api/gall/${postId}`)
+            .then(response => response.json())
+            .then(data => {
+                // 가져온 데이터를 화면에 표시
+                document.getElementById("postTitle").textContent = data.title;
+                document.getElementById("postAuthor").textContent = data.memberEmail;
+                document.getElementById("postDateTime").textContent = data.dateTime;
+                document.getElementById("postContent").textContent = data.content;
+            })
+            .catch(error => {
+                console.error('게시물 데이터를 가져오는 중 오류 발생:', error);
+            });
+    }
+
+    // 목록으로 버튼 클릭 시 목록 페이지로 이동
+    var goToListButton = document.getElementById("goToList");
+    goToListButton.addEventListener("click", function() {
+        window.location.href = "/gall"; // 이동하고자 하는 목록 페이지 URL로 변경
+    });
+
+    // 게시물 정보 가져오기
+    fetchPostDetails(postId);
+
+    //삭제 로직
+
+    var deletePostButton = document.getElementById("deletePost");
+
+    // 삭제 버튼 클릭 시 동작
+    deletePostButton.addEventListener("click", function() {
+        // 확인 메시지 대화 상자를 표시
+        var confirmDelete = confirm("정말 삭제하시겠습니까?");
+
+        if (confirmDelete) {
+            // "예"를 클릭한 경우
+            // postId를 어떻게 가져올지에 따라 다음 두 가지 옵션 중 하나를 선택하세요.
+
+            // 옵션 1: 현재 URL에서 postId 추출
+            var postId = window.location.pathname.split('/').pop();
+
+            // 옵션 2: postId를 어딘가에서 미리 가져오거나 설정
+            // var postId = ...; // postId 값을 어딘가에서 가져오거나 설정
+
+            // 서버로 DELETE 요청을 보냅니다.
+            fetch(`/api/gall/${postId}`, {
+                method: 'DELETE'
+            })
+                .then(response => {
+                    if (response.status === 204) {
+                        // 성공적으로 삭제한 경우: 어떻게 처리할지에 따라 다음 동작을 선택
+                        alert("게시물이 성공적으로 삭제되었습니다.");
+                        window.location.href = "/gall"; // 삭제 후 목록 페이지로 이동
+                    } else {
+                        // 삭제 실패 또는 오류 발생 시 처리 방법
+                        alert("게시물 삭제에 실패하였습니다.");
+                    }
+                })
+                .catch(error => {
+                    console.error('게시물 삭제 중 오류 발생:', error);
+                });
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<div th:fragment="header">
+    <header>
+        <div id="top-header">
+            <div class="container">
+                <ul class="header-links pull-left">
+                    <li><a href="/"><i class="fa fa-home"></i>Main</a></li>
+                </ul>
+                <ul class="header-links pull-right">
+                    <li sec:authorize="isAnonymous()"><a href="/members/login"><i class="fa fa-sign-in"></i> Login</a>
+                    </li>
+                    <li sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                        <div class="dropdown">
+                            <a class="dropdown-toggle"
+                               data-toggle="dropdown"
+                               aria-expanded="true">
+                                <i class="fa fa-user-o"></i> My Account
+                            </a>
+                            </div>
+                    </li>
+                    <li sec:authorize="isAuthenticated()"><a href="/members/logout"><i class="fa fa-sign-out"></i>
+                        Logout</a></li>
+                </ul>
+            </div>
+        <div id="header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="header-logo">
+                            <a href="/shop" class="logo">
+                                <img th:src="@{imgs}" alt="">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="header-search">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+</div>
+
+</html>

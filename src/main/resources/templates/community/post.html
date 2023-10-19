@@ -1,37 +1,173 @@
 <!DOCTYPE html>
-<html lang="en">
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
+        layout:decorate="~{community/postLayout}">
 <head>
-    <meta charset="UTF-8">
-    <title>게시물작성폼</title>
+    <title>간단한 게시판</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <style>
+        /* 스타일링은 필요에 따라 수정할 수 있습니다. */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .communityPost {
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            padding: 10px;
+        }
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .pagination button {
+            margin: 5px;
+        }
+
+    </style>
 </head>
-
-<style>
-    .layout{
-        width : 500px;
-        margin : 0 auto;
-        margin-top: 40px;
-    } /*layout 하위에 있는 input태그 스타일 설정*/
-    .layout input{
-        width: 100%;
-        box-sizing: border-box;
-    }
-    .layout textarea{
-        width: 100%;
-        margin-top: 10px;
-        min-height: 300px;
-    }
-</style>
-
-
+<div layout:fragment="content">
+    <nav id="navigation">
+        <div class="container">
+            <div id="responsive-nav">
+                <ul class="main-nav nav navbar-nav">
+                    <li class="nav-list" id="nav-all"><a href="/gall"></a></li>
+                    </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
 <body>
-<div class="layout">                                <!--form-data추가-->
-    <form action="/api/gall" method="post" enctype="multipart/form-data">
-        <input name="title" type="text">
-        <textarea name="content"></textarea>
-        <!--파일 선택추가-->
-        <input type="file" name="file"> <!--name이름을 controller의 매개변수 이름과 동일하게 설정-->
-        <button type="submit">작성</button>
-    </form>
+<div class="container">
+    <h1>간단한 게시판</h1>
+
+    <!-- 게시물 목록 -->
+    <div id="communityPosts">
+        <!-- 여기에 게시물이 동적으로 추가될 것입니다. -->
+    </div>
+
+    <!-- 페이지 버튼 -->
+    <div class="pagination">
+        <button id="prevPage">이전 페이지</button>
+        <button id="nextPage">다음 페이지</button>
+        <button type="button" id="writePostButton" style="margin-left: auto">글 작성</button>
+    </div>
 </div>
+
+<script>
+
+    const writePostButton = document.getElementById('writePostButton');
+
+    writePostButton.addEventListener('click', () => {
+        // 이동하고자 하는 URL을 설정
+        const targetURL = '/gall/write'; // 이동하고자 하는 URL로 변경해주세요
+
+        // 페이지를 해당 URL로 이동
+        window.location.href = targetURL;
+    });
+    // JavaScript를 사용하여 게시물 관리 및 AJAX 통신을 수행합니다.
+    const postsDiv = document.getElementById('communityPosts');
+    const prevPageButton = document.getElementById('prevPage');
+    const nextPageButton = document.getElementById('nextPage');
+
+    const postsPerPage = 20; // 페이지당 게시물 수
+    let currentPage = 1; // 현재 페이지
+
+    // Ajax를 사용하여 게시물 데이터 가져오기
+    async function fetchPosts(page) {
+        await fetch(`/api/gall/post`)
+            .then(response => response.json())
+            .then(data => {
+                // 서버로부터 받은 데이터를 화면에 표시
+                displayPosts(data);
+                // 페이지 버튼 상태 업데이트
+                updatePagination(data.totalPages, page);
+            })
+            .catch(error => {
+                console.log('게시물을 가져오는 중 오류 발생:', error);
+            });
+    }
+    function fetchPostDetails(postId) {
+        // postId를 사용하여 /api/gall/{post.id}로 데이터를 가져오는 AJAX 요청을 보냅니다.
+        fetch(`/api/gall/${postId}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                // 가져온 데이터를 이용하여 게시물 상세 정보 화면으로 이동
+                window.location.href = '/gall/' + postId;
+            })
+            .catch(error => {
+                console.error('게시물 데이터를 가져오는 중 오류 발생:', error);
+            });
+    }
+
+    // 게시물을 화면에 표시
+    function displayPosts(posts) {
+        console.log(posts);
+        postsDiv.innerHTML = '';
+        for (const post of posts) {
+            const postElement = document.createElement('div');
+            postElement.className = 'communityPost';
+            postElement.innerHTML = `
+<table class ="gall_list">
+<colgroup>
+<col style="width:7%">
+<col style="width:50%">
+<col style="width:15%">
+<col style="width:18%">
+
+</colgroup>
+<thead>
+<th scope="col">번호</th>
+<th scope="col">제목</th>
+<th scope="col">작성자</th>
+<th scope="col">작성일</th>
+</thead>
+<tbody>
+<td>${post.id}</td>
+<td><a onclick="fetchPostDetails(${post.id})">${post.title}</a></td>
+<td>${post.memberEmail}</td>
+<td>${post.dateTime}</td>
+</tbody>
+<tr class="communityPost" data-no=""
+</table>
+`;
+            postsDiv.appendChild(postElement);
+        }
+    }
+
+    // 페이지 버튼 상태 업데이트
+    function updatePagination(totalPages, currentPage) {
+        prevPageButton.disabled = currentPage <= 1;
+        nextPageButton.disabled = currentPage >= totalPages;
+    }
+
+    // 이전 페이지 버튼 클릭 시
+    prevPageButton.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            fetchPosts(currentPage);
+        }
+    });
+
+    // 다음 페이지 버튼 클릭 시
+    nextPageButton.addEventListener('click', () => {
+        if (currentPage < totalPages) {
+            currentPage++;
+            fetchPosts(currentPage);
+        }
+    });
+
+
+    // 초기 페이지 로드
+    fetchPosts(currentPage);
+</script>
 </body>
 </html>

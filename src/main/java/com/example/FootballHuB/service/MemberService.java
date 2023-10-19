@@ -43,4 +43,12 @@ public class MemberService implements UserDetailsService {
                 .build();
     }
 
+    public Long getMemberIdByEmail(String email) {
+        Member member = memberRepository.findByEmail(email);
+        if (member != null) {
+            return member.getId();
+        }
+        return null;
+    }
+
 }

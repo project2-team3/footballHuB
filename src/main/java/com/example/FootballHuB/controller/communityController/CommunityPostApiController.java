@@ -6,6 +6,9 @@ import com.example.FootballHuB.dto.communityDto.postDto.CommunityPostUpdateReque
 import com.example.FootballHuB.entity.communityEntity.CommunityPost;
 import com.example.FootballHuB.service.communityService.CommunityPostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,9 +20,18 @@ public class CommunityPostApiController {
     @Autowired
     private CommunityPostService communityPostService;
 
-    @GetMapping("/")
+    public UserDetails getCurrentUserDetails() {
+        return (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+    @GetMapping("/post")
     public List<CommunityPostReadResponse> AllPost() {
         return communityPostService.getAll();
+    }
+
+    @GetMapping("/{id}")
+    public CommunityPostReadResponse readPost(@PathVariable(value = "id") Long id) {
+        return communityPostService.getPost(id);
     }
 
     @GetMapping("/title-page")
@@ -37,12 +49,17 @@ public class CommunityPostApiController {
         return communityPostService.findByName(name);
     }
 
-    @PostMapping("/")
+    @PostMapping("/write")
     public Long createPost(@RequestBody CommunityPostCreateRequest c) {
         return communityPostService.create(c);
     }
 
-    @PutMapping("/")
+    @GetMapping("/user")
+    public UserDetails getCurrentUser() {
+        return getCurrentUserDetails();
+    }
+
+    @PutMapping("/update")
     public Long updatePost(@RequestBody CommunityPostUpdateRequest u) {
         return communityPostService.update(u);
     }

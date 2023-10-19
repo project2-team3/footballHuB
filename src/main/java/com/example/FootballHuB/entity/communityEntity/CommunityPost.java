@@ -4,6 +4,7 @@ import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -24,34 +25,34 @@ public class CommunityPost {
     private String content;
 
     @Column(nullable = false)
-    private Long memberId;
+    private String memberEmail;
 
+    @CreationTimestamp
     @Column(nullable = false)
     private LocalDateTime dateTime;
 
-    @Column(nullable = false)
-    private Long likeHeart;
-
-    @Column(nullable = false)
-    private Long views;
 
     public CommunityPost() {
     }
 
-    public CommunityPost(String title, String content, Long memberId ) {
-        this.title = title;
-        this.content = content;
-        this.memberId = memberId;
-
-    }
-
-    public CommunityPost(Long id, String title, String content, Long memberId, LocalDateTime dateTime, Long likeHeart, Long views) {
+    public CommunityPost(Long id, String title, String content, String memberEmail, LocalDateTime dateTime) {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.memberId = memberId;
+        this.memberEmail = memberEmail;
         this.dateTime = dateTime;
-        this.likeHeart = likeHeart;
-        this.views = views;
+    }
+
+    public CommunityPost(String title, String content, String memberEmail) {
+        this.title = title;
+        this.content = content;
+        this.memberEmail = memberEmail;
+    }
+
+    public CommunityPost(String title, String content, String memberEmail, LocalDateTime dateTime) {
+        this.title = title;
+        this.content = content;
+        this.memberEmail = memberEmail;
+        this.dateTime = dateTime;
     }
 }

@@ -8,6 +8,9 @@ import com.example.FootballHuB.entity.communityEntity.CommunityPost;
 import com.example.FootballHuB.repository.MemberRepository;
 import com.example.FootballHuB.repository.communityRepository.CommunityPostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,25 +32,33 @@ public class CommunityPostService {
 
 
     public List<CommunityPostReadResponse> getAll() { // Post내 정보를 모두 불러 오는 함수
-        return communityPostRepository.findAll()
+        return communityPostRepository.findAll(Sort.by(Sort.Order.desc("id")))
                 .stream()
                 .map(CommunityPostReadResponse::fromEntity)
                 .collect(Collectors.toList());
     }
+    /*public Page<CommunityPostReadResponse> getAll(Pageable pageable) {
+        Page<CommunityPost> posts = communityPostRepository.findAll(pageable);
+        return posts.map(CommunityPostReadResponse::fromEntity);
+    }*/
 
-    public List<CommunityPost> findByTitle(final String title){
+    public CommunityPostReadResponse getPost(final Long id) {
+        return CommunityPostReadResponse.fromEntity(communityPostRepository.getById(id));
+    }
+
+    public List<CommunityPost> findByTitle(final String title) {
         return communityPostRepository.findByTitleContaining(title);
     }
 
-    public List<CommunityPost> findByContent(final String content){
+    public List<CommunityPost> findByContent(final String content) {
         return communityPostRepository.findByContentContaining(content);
     }
 
-    public List<CommunityPost> findByName(final String name){
-        Member member= memberRepository.findByName(name);
-        if(member != null){
-            Long memberId = member.getId();
-            return communityPostRepository.findByMemberId(memberId);
+    public List<CommunityPost> findByName(final String name) {
+        Member member = memberRepository.findByName(name);
+        if (member != null) {
+            String memberEmail = member.getEmail();
+            return communityPostRepository.findByMemberEmail(memberEmail);
         }
         return Collections.emptyList();
     }
@@ -56,7 +67,9 @@ public class CommunityPostService {
         CommunityPost p = new CommunityPost(
                 c.getTitle(),
                 c.getContent(),
-                c.getMemberId());
+                c.getMemberEmail(),
+                c.getDateTime()
+        );
 
         return communityPostRepository.save(p).getId();
     }
@@ -69,9 +82,9 @@ public class CommunityPostService {
     }
 
     public Long delete(final Long postId) {
-        Long memberId = (Long) request.getAttribute("id");
+        String memberEmail = (String) request.getAttribute("eMail");
         CommunityPost p = communityPostRepository.getReferenceById(postId);
-        if (p.getMemberId() == memberId) {
+        if (p.getMemberEmail() == memberEmail) {
             communityPostRepository.delete(p);
         }
         return p.getId();

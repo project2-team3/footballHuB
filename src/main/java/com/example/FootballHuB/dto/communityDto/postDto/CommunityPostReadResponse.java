@@ -4,6 +4,7 @@ import com.example.FootballHuB.entity.communityEntity.CommunityPost;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import oracle.jdbc.proxy.annotation.Post;
 
 import java.time.LocalDateTime;
 
@@ -15,33 +16,27 @@ public class CommunityPostReadResponse {
     private Long id;
     private String title;
     private String content;
-    private Long memberId;
-    private LocalDateTime dataTime;
-    private Long likeHeart;
-    private Long views;
+    private String memberEmail;
+    private LocalDateTime dateTime;
 
     public static CommunityPostReadResponse fromEntity(CommunityPost p){
         return new CommunityPostReadResponse(
                 p.getId(),
                 p.getTitle(),
                 p.getContent(),
-                p.getMemberId(),
-                p.getDateTime(),
-                p.getLikeHeart(),
-                p.getViews()
+                p.getMemberEmail(),
+                p.getDateTime()
         );
     }
 
     public CommunityPostReadResponse() {
     }
 
-    public CommunityPostReadResponse(Long id, String title, String content, Long memberId, LocalDateTime dataTime, Long likeHeart, Long views) {
+    public CommunityPostReadResponse(Long id, String title, String content, String memberEmail, LocalDateTime dateTime) {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.memberId = memberId;
-        this.dataTime = dataTime;
-        this.likeHeart = likeHeart;
-        this.views = views;
+        this.memberEmail = memberEmail;
+        this.dateTime= dateTime;
     }
 }
