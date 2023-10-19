@@ -2195,9 +2195,11 @@ textarea.input {
 yellow: #bbae94
 */
 
+/*
 dl, dt, dd {
     list-style: none
 }
+*/
 
 .hidden {
     display: none;
@@ -2209,7 +2211,7 @@ dl, dt, dd {
 }
 
 .cart-basket {
-    width: 824px;
+    width: 100%;
     margin-bottom: 16px;
     background-color: #f8f7f6;
     overflow: hidden;
@@ -2243,7 +2245,7 @@ dl, dt, dd {
     padding: 0 22px;
 }
 
-.cart-basket .basket-info .order-idx {
+.cart-basket .basket-info .order-list .order-idx {
     height: auto;
     overflow: visible;
     padding-top: 20px;
@@ -2276,7 +2278,7 @@ dl, dt, dd {
 .cart-basket .basket-info .order-idx .item-info {
     float: left;
     display: inline-block;
-    width: 656px;
+    width: 100%;
     margin-left: 12px;
     min-height: 100px;
 }

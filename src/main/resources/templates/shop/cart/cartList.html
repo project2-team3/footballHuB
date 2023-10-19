@@ -190,8 +190,8 @@
                                                     <img th:src="${cartItem.imgUrl}" th:alt="${cartItem.itemNm}">
                                                 </div>
                                                 <div class="item-info">
-                                                    <dl class="unit-item first">
-                                                        <dd class="unit-item-desc" th:id="'cart-unit-' + ${cartItem.cartItemId}">
+                                                    <div class="unit-item first">
+                                                        <div class="unit-item-desc" th:id="'cart-unit-' + ${cartItem.cartItemId}">
                                                             <div class="section item-title">
                                                                 <strong class="hidden">상품명:</strong>
                                                                 <span class="item-name" th:text="${cartItem.itemNm}"></span>
@@ -224,8 +224,8 @@
                                                                         </div>
                                                                     </div>
                                                             </div>
-                                                        </dd>
-                                                    </dl>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </li>
